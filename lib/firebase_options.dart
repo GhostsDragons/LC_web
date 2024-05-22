@@ -21,9 +21,15 @@ class DefaultFirebaseOptions {
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
-        return android;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for android - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.iOS:
-        return ios;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for ios - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -54,23 +60,5 @@ class DefaultFirebaseOptions {
     authDomain: 'learners-bc137.firebaseapp.com',
     storageBucket: 'learners-bc137.appspot.com',
     measurementId: 'G-SRJQTKPM2T',
-  );
-
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAxt6u1vwCVM_AatXrwbfQqH2JoP_uxGW4',
-    appId: '1:205023071868:android:b960465554fccbe8bd03f9',
-    messagingSenderId: '205023071868',
-    projectId: 'learners-bc137',
-    storageBucket: 'learners-bc137.appspot.com',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBT77q07ALs7Xkjui_TOl0DSbcrd_R8IhI',
-    appId: '1:205023071868:ios:a7013104ee006be9bd03f9',
-    messagingSenderId: '205023071868',
-    projectId: 'learners-bc137',
-    storageBucket: 'learners-bc137.appspot.com',
-    iosClientId: '205023071868-41v2g4m5o7f6j9qa1ieghb44ajmra18l.apps.googleusercontent.com',
-    iosBundleId: 'com.example.learnersClub',
   );
 }

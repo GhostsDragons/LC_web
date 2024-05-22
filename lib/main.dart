@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 // import 'package:learners_club/Pages/signup.dart';
 // import 'package:learners_club/Pages/home.dart';
 // import 'package:learners_club/Pages/settings.dart';
-import 'package:my_web_app/Pages/login.dart';
+import 'package:lc_web/Pages/login.dart';
 import 'package:firebase_core/firebase_core.dart';
 // import 'package:learners_club/Pages/welcome_1.dart';
-import 'package:my_web_app/firebase_options.dart';
+import 'package:lc_web/firebase_options.dart';
 // import 'package:learners_club/Pages/transition_page.dart';
 // import 'Pages/onboarding.dart';
 
@@ -25,6 +25,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       title: 'Learners Club',
       theme: ThemeData(
