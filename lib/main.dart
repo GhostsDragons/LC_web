@@ -25,13 +25,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       title: 'Learners Club',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-
       initialRoute: '/login',
       routes: {
         '/login': (context) => const Login(),
@@ -42,7 +40,6 @@ class MyApp extends StatelessWidget {
         // '/onboarding': (context) => const Onboarding(),
         // '/welcome' : (context) => const WelcomePageOne(),
         // '/profile' : (context) => const Profile(),
-
       },
     );
   }
