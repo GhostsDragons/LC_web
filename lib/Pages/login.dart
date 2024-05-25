@@ -10,31 +10,23 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final GlobalKey _layoutBuilderKey = GlobalKey();
-
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return const Text("Hi");
-        } 
-        else {
-          return LayoutBuilder(
-            key: _layoutBuilderKey,
-            builder: (context, constraints) {
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return const Text("Hi");
+          } else {
+            return LayoutBuilder(builder: (context, constraints) {
               if (constraints.maxWidth < 600) {
                 return MobileLayout(constraints: constraints);
-              } 
-              else {
+              } else {
                 return DesktopLayout(constraints: constraints);
               }
-            }
-          );
-        }
-      }
-    );
+            });
+          }
+        });
   }
 }
 
@@ -48,11 +40,8 @@ class DesktopLayout extends StatefulWidget {
 }
 
 class _DesktopLayoutState extends State<DesktopLayout> {
-  int maxWidth = 250;
-  int maxHeight = 50;
-
   var obscureText = true;
-  bool loading = false;
+  var loading = false;
   var email = "";
   var password = "";
   final formkey = GlobalKey<FormState>();
@@ -88,29 +77,26 @@ class _DesktopLayoutState extends State<DesktopLayout> {
             fit: BoxFit.cover,
             opacity: .5,
           ),
-
           gradient: LinearGradient(
             colors: [Color(0xffffffff), Color(0xff67D0C8)],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
         ),
-
         child: Row(
           children: [
-            Container(
-              margin: const EdgeInsets.fromLTRB(05, 5, 30, 5),
-              width: widget.constraints.maxWidth / 2,
-              alignment: Alignment.center,
-              color: const Color.fromRGBO(255, 0, 0, 1),
-              child: const Text(
-                "Here",
-                style: TextStyle(fontSize: 24),
-              ),
+            const Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Learners\' Club'),
+                Text('Learning Unbounded'),
+              ],
             ),
-
             Container(
-              color: const Color.fromRGBO(255, 255, 255, 0.5),
+              decoration: const BoxDecoration(
+                color: Color.fromRGBO(255, 255, 255, 0.5),
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
               padding: const EdgeInsets.fromLTRB(25, 75, 25, 75),
               child: SingleChildScrollView(
                 child: Form(
@@ -121,7 +107,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                       FilledButton(
                         style: ButtonStyle(
                           backgroundColor: WidgetStateProperty.all<Color>(
-                            const Color(0xFFBDE3EA)),
+                              const Color(0xFFEEEEEE)),
                           shape:
                               WidgetStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
@@ -131,24 +117,23 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                         ),
                         onPressed: () {},
                         child: Container(
-                          width: 250,
-                          height: 50,
+                          width: widget.constraints.maxWidth / 4.5,
                           padding: const EdgeInsets.all(10),
                           child: const Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Image(
-                                image: AssetImage('assets/R.png'),
-                                height: 25
-                              ),
-
-                              Text(
-                                'Sign in with Google',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 20,
-                                  fontFamily: "Archivo",
-                                  fontWeight: FontWeight.w700,
+                                  image: AssetImage('assets/R.png'),
+                                  height: 25),
+                              Expanded(
+                                child: Text(
+                                  'Google',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 20,
+                                    fontFamily: "Archivo",
+                                    fontWeight: FontWeight.w700,
+                                  ),
                                 ),
                               ),
                             ],
@@ -165,89 +150,11 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                       ),
 
                       // ---------------------------------------------------------------------------------------
-                      // Or Line
-                      // ---------------------------------------------------------------------------------------
-
-                      SizedBox(
-                        width: 158,
-                        height: 30,
-                        child: Stack(
-                          children: [
-                            const Positioned(
-                              left: 69,
-                              top: 0,
-                              child: Text(
-                                'or',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 20,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-
-                            // ---------------------------------------------------------------------------------------
-                            // Left line to 'Or'
-                            // ---------------------------------------------------------------------------------------
-
-                            Positioned(
-                              left: 60,
-                              top: 15,
-                              child: Transform(
-                                transform: Matrix4.identity()
-                                  ..translate(0.0, 0.0)
-                                  ..rotateZ(-3.14),
-                                child: Container(
-                                  width: 60,
-                                  decoration: const ShapeDecoration(
-                                    shape: RoundedRectangleBorder(
-                                      side: BorderSide(
-                                        width: 0.50,
-                                        strokeAlign:
-                                            BorderSide.strokeAlignCenter,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-
-                            // ---------------------------------------------------------------------------------------
-                            // Right Line to 'Or'
-                            // ---------------------------------------------------------------------------------------
-
-                            Positioned(
-                              left: 158,
-                              top: 15,
-                              child: Transform(
-                                transform: Matrix4.identity()
-                                  ..translate(0.0, 0.0)
-                                  ..rotateZ(-3.14),
-                                child: Container(
-                                  width: 60,
-                                  decoration: const ShapeDecoration(
-                                    shape: RoundedRectangleBorder(
-                                      side: BorderSide(
-                                        width: 0.50,
-                                        strokeAlign:
-                                            BorderSide.strokeAlignCenter,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      // ---------------------------------------------------------------------------------------
                       // Email Input
                       // ---------------------------------------------------------------------------------------
 
                       Container(
-                        width: 250,
+                        width: widget.constraints.maxWidth / 4.5,
                         height: 50,
                         margin: const EdgeInsets.fromLTRB(30, 5, 30, 5),
                         child: TextFormField(
@@ -277,7 +184,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                       // ---------------------------------------------------------------------------------------
 
                       Container(
-                        width: 250,
+                        width: widget.constraints.maxWidth / 4.5,
                         height: 50,
                         margin: const EdgeInsets.fromLTRB(30, 5, 30, 0),
                         child: TextFormField(
@@ -297,8 +204,8 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                                 });
                               },
                               icon: obscureText
-                                ? const Icon(Icons.visibility_off)
-                                : const Icon(Icons.visibility),
+                                  ? const Icon(Icons.visibility_off)
+                                  : const Icon(Icons.visibility),
                             ),
                             labelText: 'Password',
                             labelStyle: const TextStyle(
@@ -349,7 +256,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                       // ---------------------------------------------------------------------------------------
 
                       SizedBox(
-                        width: 250,
+                        width: widget.constraints.maxWidth / 4.5,
                         height: 50,
                         child: ElevatedButton(
                           style: ButtonStyle(
@@ -418,13 +325,9 @@ class _DesktopLayoutState extends State<DesktopLayout> {
   }
 }
 
-
-// ---------------------------------------------------------------------------------------
-// Mobile Layout
-// ---------------------------------------------------------------------------------------
-
 class MobileLayout extends StatefulWidget {
   final BoxConstraints constraints;
+
   const MobileLayout({super.key, required this.constraints});
 
   @override
@@ -432,63 +335,25 @@ class MobileLayout extends StatefulWidget {
 }
 
 class _MobileLayoutState extends State<MobileLayout> {
-  int maxWidth = 250;
-  int maxHeight = 50;
-
-  var obscureText = true;
-  bool loading = false;
-  var email = "";
-  var password = "";
-  final formkey = GlobalKey<FormState>();
-
-  final emailcontroller = TextEditingController();
-  final passwordcontroller = TextEditingController();
-
-  handleSubmit() async {
-    if (!formkey.currentState!.validate()) {
-      return;
-    }
-    password = passwordcontroller.value.text;
-    email = emailcontroller.value.text;
-
-    setState(() {
-      loading = true;
-    });
-
-    await Auth().signInWithEmailAndPassword(email, password);
-
-    setState(() {
-      loading = false;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/BG.jpg'),
-                fit: BoxFit.cover,
-                opacity: .5,
-              ),
-
-              color: Color.fromRGBO(0, 0, 0, 0.9),
-              gradient: LinearGradient(
-                colors: [Color(0xffffffff), Color(0xff67D0C8)],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-            ),
+        body: Stack(children: [
+      Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/BG.jpg'),
+            fit: BoxFit.cover,
+            opacity: .5,
           ),
-
-
-        ]
-      )
-    );
+          color: Color.fromRGBO(0, 0, 0, 0.9),
+          gradient: LinearGradient(
+            colors: [Color(0xffffffff), Color(0xff67D0C8)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+      ),
+    ]));
   }
 }
-
-
