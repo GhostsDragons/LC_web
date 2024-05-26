@@ -10,6 +10,8 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  final GlobalKey _layoutBuilderKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -46,8 +48,11 @@ class DesktopLayout extends StatefulWidget {
 }
 
 class _DesktopLayoutState extends State<DesktopLayout> {
+  int maxWidth = 250;
+  int maxHeight = 50;
+
   var obscureText = true;
-  var loading = false;
+  bool loading = false;
   var email = "";
   var password = "";
   final formkey = GlobalKey<FormState>();
@@ -116,7 +121,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                       FilledButton(
                         style: ButtonStyle(
                           backgroundColor: WidgetStateProperty.all<Color>(
-                            const Color(0xFFBDE3EA)),
+                              const Color(0xFFBDE3EA)),
                           shape:
                               WidgetStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
@@ -126,7 +131,8 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                         ),
                         onPressed: () {},
                         child: Container(
-                          width: widget.constraints.maxWidth / 4.5,
+                          width: 250,
+                          height: 50,
                           padding: const EdgeInsets.all(10),
                           child: const Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -159,11 +165,89 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                       ),
 
                       // ---------------------------------------------------------------------------------------
+                      // Or Line
+                      // ---------------------------------------------------------------------------------------
+
+                      SizedBox(
+                        width: 158,
+                        height: 30,
+                        child: Stack(
+                          children: [
+                            const Positioned(
+                              left: 69,
+                              top: 0,
+                              child: Text(
+                                'or',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+
+                            // ---------------------------------------------------------------------------------------
+                            // Left line to 'Or'
+                            // ---------------------------------------------------------------------------------------
+
+                            Positioned(
+                              left: 60,
+                              top: 15,
+                              child: Transform(
+                                transform: Matrix4.identity()
+                                  ..translate(0.0, 0.0)
+                                  ..rotateZ(-3.14),
+                                child: Container(
+                                  width: 60,
+                                  decoration: const ShapeDecoration(
+                                    shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                        width: 0.50,
+                                        strokeAlign:
+                                            BorderSide.strokeAlignCenter,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            // ---------------------------------------------------------------------------------------
+                            // Right Line to 'Or'
+                            // ---------------------------------------------------------------------------------------
+
+                            Positioned(
+                              left: 158,
+                              top: 15,
+                              child: Transform(
+                                transform: Matrix4.identity()
+                                  ..translate(0.0, 0.0)
+                                  ..rotateZ(-3.14),
+                                child: Container(
+                                  width: 60,
+                                  decoration: const ShapeDecoration(
+                                    shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                        width: 0.50,
+                                        strokeAlign:
+                                            BorderSide.strokeAlignCenter,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      // ---------------------------------------------------------------------------------------
                       // Email Input
                       // ---------------------------------------------------------------------------------------
 
                       Container(
-                        width: widget.constraints.maxWidth / 4.5,
+                        width: 250,
                         height: 50,
                         margin: const EdgeInsets.fromLTRB(30, 5, 30, 5),
                         child: TextFormField(
@@ -193,7 +277,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                       // ---------------------------------------------------------------------------------------
 
                       Container(
-                        width: widget.constraints.maxWidth / 4.5,
+                        width: 250,
                         height: 50,
                         margin: const EdgeInsets.fromLTRB(30, 5, 30, 0),
                         child: TextFormField(
@@ -265,7 +349,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                       // ---------------------------------------------------------------------------------------
 
                       SizedBox(
-                        width: widget.constraints.maxWidth / 4.5,
+                        width: 250,
                         height: 50,
                         child: ElevatedButton(
                           style: ButtonStyle(
@@ -341,7 +425,6 @@ class _DesktopLayoutState extends State<DesktopLayout> {
 
 class MobileLayout extends StatefulWidget {
   final BoxConstraints constraints;
-
   const MobileLayout({super.key, required this.constraints});
 
   @override
@@ -349,6 +432,36 @@ class MobileLayout extends StatefulWidget {
 }
 
 class _MobileLayoutState extends State<MobileLayout> {
+  int maxWidth = 250;
+  int maxHeight = 50;
+
+  var obscureText = true;
+  bool loading = false;
+  var email = "";
+  var password = "";
+  final formkey = GlobalKey<FormState>();
+
+  final emailcontroller = TextEditingController();
+  final passwordcontroller = TextEditingController();
+
+  handleSubmit() async {
+    if (!formkey.currentState!.validate()) {
+      return;
+    }
+    password = passwordcontroller.value.text;
+    email = emailcontroller.value.text;
+
+    setState(() {
+      loading = true;
+    });
+
+    await Auth().signInWithEmailAndPassword(email, password);
+
+    setState(() {
+      loading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
