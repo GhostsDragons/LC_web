@@ -15,22 +15,26 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return const Text("Hi");
-          } else {
-            return LayoutBuilder(
-                key: _layoutBuilderKey,
-                builder: (context, constraints) {
-                  if (constraints.maxWidth < 600) {
-                    return MobileLayout(constraints: constraints);
-                  } else {
-                    return DesktopLayout(constraints: constraints);
-                  }
-                });
-          }
-        });
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return const Text("Hi");
+        } 
+        else {
+          return LayoutBuilder(
+            key: _layoutBuilderKey,
+            builder: (context, constraints) {
+              if (constraints.maxWidth < 600) {
+                return MobileLayout(constraints: constraints);
+              } 
+              else {
+                return DesktopLayout(constraints: constraints);
+              }
+            }
+          );
+        }
+      }
+    );
   }
 }
 
@@ -84,12 +88,14 @@ class _DesktopLayoutState extends State<DesktopLayout> {
             fit: BoxFit.cover,
             opacity: .5,
           ),
+
           gradient: LinearGradient(
             colors: [Color(0xffffffff), Color(0xff67D0C8)],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
         ),
+
         child: Row(
           children: [
             Container(
@@ -102,6 +108,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                 style: TextStyle(fontSize: 24),
               ),
             ),
+
             Container(
               color: const Color.fromRGBO(255, 255, 255, 0.5),
               padding: const EdgeInsets.fromLTRB(25, 75, 25, 75),
@@ -114,7 +121,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                       FilledButton(
                         style: ButtonStyle(
                           backgroundColor: WidgetStateProperty.all<Color>(
-                              const Color(0xFFBDE3EA)),
+                            const Color(0xFFBDE3EA)),
                           shape:
                               WidgetStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
@@ -131,8 +138,10 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Image(
-                                  image: AssetImage('assets/R.png'),
-                                  height: 25),
+                                image: AssetImage('assets/R.png'),
+                                height: 25
+                              ),
+
                               Text(
                                 'Sign in with Google',
                                 style: TextStyle(
@@ -288,8 +297,8 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                                 });
                               },
                               icon: obscureText
-                                  ? const Icon(Icons.visibility_off)
-                                  : const Icon(Icons.visibility),
+                                ? const Icon(Icons.visibility_off)
+                                : const Icon(Icons.visibility),
                             ),
                             labelText: 'Password',
                             labelStyle: const TextStyle(
@@ -409,6 +418,11 @@ class _DesktopLayoutState extends State<DesktopLayout> {
   }
 }
 
+
+// ---------------------------------------------------------------------------------------
+// Mobile Layout
+// ---------------------------------------------------------------------------------------
+
 class MobileLayout extends StatefulWidget {
   final BoxConstraints constraints;
   const MobileLayout({super.key, required this.constraints});
@@ -451,22 +465,30 @@ class _MobileLayoutState extends State<MobileLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Stack(children: [
-      Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/BG.jpg'),
-            fit: BoxFit.cover,
-            opacity: .5,
+      body: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/BG.jpg'),
+                fit: BoxFit.cover,
+                opacity: .5,
+              ),
+
+              color: Color.fromRGBO(0, 0, 0, 0.9),
+              gradient: LinearGradient(
+                colors: [Color(0xffffffff), Color(0xff67D0C8)],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+            ),
           ),
-          color: Color.fromRGBO(0, 0, 0, 0.9),
-          gradient: LinearGradient(
-            colors: [Color(0xffffffff), Color(0xff67D0C8)],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
-      ),
-    ]));
+
+
+        ]
+      )
+    );
   }
 }
+
+

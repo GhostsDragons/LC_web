@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-// import 'package:learners_club/Pages/profile.dart';
-// import 'package:learners_club/Pages/signup.dart';
-// import 'package:learners_club/Pages/home.dart';
-// import 'package:learners_club/Pages/settings.dart';
+// import 'package:lc_web/Pages/profile.dart';
+import 'package:lc_web/Pages/signup.dart';
+// import 'package:lc_web/Pages/home.dart';
+// import 'package:lc_web/Pages/settings.dart';
 import 'package:lc_web/Pages/login.dart';
 import 'package:firebase_core/firebase_core.dart';
-// import 'package:learners_club/Pages/welcome_1.dart';
+// import 'package:lc_web/Pages/welcome_1.dart';
 import 'package:lc_web/firebase_options.dart';
-// import 'package:learners_club/Pages/transition_page.dart';
+// import 'package:lc_web/Pages/transition_page.dart';
 // import 'Pages/onboarding.dart';
 
 Future<void> main() async {
@@ -30,10 +30,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/login',
+      initialRoute: '/signup',
       routes: {
         '/login': (context) => const Login(),
-        // '/signup': (context) => Signup(),
+        '/signup': (context) => const Signup(),
         // '/home': (context) => const HomePage(),
         // '/settings': (context) => const Settings(),
         // '/transition': (context) => const TransitionPage(),
