@@ -26,11 +26,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // debugShowCheckedModeBanner: false,
       title: 'Learners Club',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/signup',
+      initialRoute: '/login',
       routes: {
         '/login': (context) => const Login(),
         '/signup': (context) => const Signup(),
