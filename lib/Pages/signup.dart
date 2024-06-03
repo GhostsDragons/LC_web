@@ -1,5 +1,7 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../Functions/functions.dart';
 
 class Signup extends StatefulWidget {
@@ -17,8 +19,8 @@ class _SignupState extends State<Signup> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return const Text('Hi');
-        } 
-        
+        }
+
         else {
           return LayoutBuilder(
             builder: (context, constraints) {
@@ -74,7 +76,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
             ),
           ),
         ),
-        
+
         Center(
           child: Container(
             decoration: BoxDecoration(
