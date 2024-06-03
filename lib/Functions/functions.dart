@@ -16,30 +16,55 @@ class Reviews extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(25.0),
       child: SizedBox(
-        width: constraints.maxWidth/3,
+        width: constraints.maxWidth / 3,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Row(
-              children: [
-                Image.asset(
-                  imgURL,
-                  scale: 3,),
-                const SizedBox(width: 10,),
-                Text(name,),
-              ],
+            FittedBox(
+              fit: BoxFit.contain,
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    backgroundImage: AssetImage(
+                      imgURL,
+                    ),
+                    radius: 30,
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  Text(
+                    name,
+                    style: const TextStyle(
+                        fontFamily: 'Unbounded',
+                        fontSize: 30,
+                        fontWeight: FontWeight.w300,
+                        color: Color(0xcc1F3E3C)),
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(width: 100,),
+            const SizedBox(
+              height: 20,
+            ),
+            // FittedBox(
+            //   fit: BoxFit.fitHeight,
             Flexible(
                 child: Text(
-                    rev)),
+              rev,
+              style: const TextStyle(
+                fontFamily: 'Archivo',
+                fontSize: 15,
+                color: Color(0xff1F3E3C),
+              ),
+            )),
           ],
         ),
       ),
     );
   }
 }
-
 
 class FormInput extends StatelessWidget {
   const FormInput({
@@ -71,7 +96,6 @@ class FormInput extends StatelessWidget {
           ),
         ),
       ),
-
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'Please enter value';
