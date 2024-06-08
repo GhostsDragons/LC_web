@@ -2,7 +2,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:lc_web/Firebase/firebase_auth.dart';
-
 import '../Functions/functions.dart';
 
 class Login extends StatefulWidget {
@@ -13,23 +12,29 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return const Text("Hi");
-          } else {
-            return LayoutBuilder(builder: (context, constraints) {
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return const Text("Hi");
+        } 
+        else {
+          return LayoutBuilder(
+            builder: (context, constraints) {
               if (constraints.maxWidth < 600) {
                 return MobileLayout(constraints: constraints);
-              } else {
+              } 
+              else {
                 return DesktopLayout(constraints: constraints);
               }
-            });
-          }
-        });
+            }
+          );
+        }
+      }
+    );
   }
 }
 
@@ -47,6 +52,7 @@ class DesktopLayout extends StatefulWidget {
 }
 
 class _DesktopLayoutState extends State<DesktopLayout> {
+
   var obscureText = true;
   bool loading = false;
   var email = "";
@@ -377,6 +383,7 @@ class MobileLayout extends StatefulWidget {
 }
 
 class _MobileLayoutState extends State<MobileLayout> {
+
   var obscureText = true;
   bool loading = false;
   var email = "";
@@ -407,22 +414,30 @@ class _MobileLayoutState extends State<MobileLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Stack(children: [
-      Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/BG.jpg'),
-            fit: BoxFit.cover,
-            opacity: .2,
+      body: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/BG.jpg'),
+                fit: BoxFit.cover,
+                opacity: .5,
+              ),
+
+              color: Color.fromRGBO(0, 0, 0, 0.9),
+              gradient: LinearGradient(
+                colors: [Color(0xffffffff), Color(0xff67D0C8)],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+            ),
           ),
-          color: Color.fromRGBO(0, 0, 0, 0.9),
-          gradient: LinearGradient(
-            colors: [Color(0xffffffff), Color(0xff1F3E3C)],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
-      ),
-    ]));
+
+
+        ]
+      )
+    );
   }
 }
+
+
