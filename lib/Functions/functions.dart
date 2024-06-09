@@ -73,17 +73,21 @@ class FormInput extends StatelessWidget {
     required this.keyboardType,
     required this.label,
     required this.hint,
+    this.obsTxt = false,
+    this.vis = true
   });
 
   final TextEditingController textController;
   final TextInputType keyboardType;
   final String label, hint;
+  final bool obsTxt, vis;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: textController,
       keyboardType: keyboardType,
+      obscureText: obsTxt,
       decoration: InputDecoration(
         labelText: label,
         hintText: hint,
@@ -97,7 +101,7 @@ class FormInput extends StatelessWidget {
         ),
       ),
       validator: (value) {
-        if (value == null || value.isEmpty) {
+        if ((value == null || value.isEmpty) && vis) {
           return 'Please enter value';
         }
         return null;

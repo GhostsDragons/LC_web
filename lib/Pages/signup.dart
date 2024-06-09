@@ -1,7 +1,5 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../Functions/functions.dart';
 
 class Signup extends StatefulWidget {
@@ -420,8 +418,7 @@ class _MobileLayoutState extends State<MobileLayout> {
                           validator: (value) {
                             // ignore: unrelated_type_equality_checks
                             if (value == null ||
-                                value.isEmpty ||
-                                value != pass1Controller.value) {
+                                value.isEmpty) {
                               return "Please enter password";
                             }
                             return null;

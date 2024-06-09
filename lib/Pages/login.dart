@@ -12,29 +12,23 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return const Text("Hi");
-        } 
-        else {
-          return LayoutBuilder(
-            builder: (context, constraints) {
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return const Text("Hi");
+          } else {
+            return LayoutBuilder(builder: (context, constraints) {
               if (constraints.maxWidth < 600) {
                 return MobileLayout(constraints: constraints);
-              } 
-              else {
+              } else {
                 return DesktopLayout(constraints: constraints);
               }
-            }
-          );
-        }
-      }
-    );
+            });
+          }
+        });
   }
 }
 
@@ -58,6 +52,8 @@ class _DesktopLayoutState extends State<DesktopLayout> {
   var email = "";
   var password = "";
   final formkey = GlobalKey<FormState>();
+  bool pwd = false;
+  String? status;
 
   final emailcontroller = TextEditingController();
   final passwordcontroller = TextEditingController();
@@ -67,14 +63,24 @@ class _DesktopLayoutState extends State<DesktopLayout> {
       return;
     }
     password = passwordcontroller.value.text;
+    if(password == "") {
+      password = "2536";
+
+    }
     email = emailcontroller.value.text;
 
     setState(() {
       loading = true;
     });
 
-    await Auth().signInWithEmailAndPassword(email, password);
-
+    status = await Auth().signInWithEmailAndPassword(email, password);
+    if (status == "Sign-up") {
+      Navigator.pushNamed(context, '/signup');
+    } else if (status == "pwd") {
+      setState(() {
+        pwd = true;
+      });
+    }
     setState(() {
       loading = false;
     });
@@ -94,7 +100,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                 opacity: .2,
               ),
               gradient: LinearGradient(
-                colors: [Color(0xffffffff), Color(0xff1F3E3C)],
+                colors: [Color(0xffffffff), Color(0xff1f3e3c)],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
               ),
@@ -121,7 +127,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                               fontFamily: 'Unbounded',
                               fontWeight: FontWeight.w800,
                               fontSize: 70,
-                              color: Color(0xcc1F3E3C)),
+                              color: Color(0xff1F3E3C)),
                         ),
                       ),
                     ),
@@ -206,7 +212,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                     ),
                     borderRadius: BorderRadius.circular(20)),
                 padding:
-                    const EdgeInsets.symmetric(vertical: 100, horizontal: 30),
+                    const EdgeInsets.symmetric(vertical: 50, horizontal: 30),
                 width: widget.constraints.maxWidth / 3,
                 margin:
                     const EdgeInsets.symmetric(vertical: 100, horizontal: 50),
@@ -222,10 +228,13 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                           "Login",
                           style: TextStyle(
                             fontSize: 40,
+                            fontFamily: 'Unbounded',
+                            color: Color(0xff1F3E3C),
                             fontWeight: FontWeight.bold,
                             // fontFamily:
                           ),
                         ),
+
                         const SizedBox(
                           height: 20,
                         ),
@@ -237,20 +246,24 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                           label: 'Email Address',
                           hint: 'email@domain.com',
                         ),
+
                         const SizedBox(
                           height: 10,
                         ),
 
                         // Password
                         Visibility(
-                          visible: false,
+                          visible: pwd,
                           child: FormInput(
                             textController: passwordcontroller,
                             keyboardType: TextInputType.visiblePassword,
                             label: 'Password',
                             hint: 'Enter your password',
+                            obsTxt: true,
+                            vis: pwd,
                           ),
                         ),
+
                         const SizedBox(
                           height: 10,
                         ),
@@ -258,19 +271,28 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                         // Login Button
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.purple,
+                            backgroundColor: const Color(0xff1F3E3C),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(5),
                             ),
                           ),
-                          onPressed: () {},
-                          child: const Text(
-                            'Sign up with Email',
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
+                          onPressed: () => handleSubmit(),
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  'Sign up with Email',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
+
                         const SizedBox(
                           height: 15,
                         ),
@@ -278,10 +300,11 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                         const Text('or continue with'),
                         const SizedBox(height: 15),
 
+                        // Google
                         FilledButton(
                           style: ButtonStyle(
                             backgroundColor: WidgetStateProperty.all<Color>(
-                                const Color(0xFFBDE3EA)),
+                                const Color(0xffeeeeee)),
                             shape:
                             WidgetStateProperty.all<RoundedRectangleBorder>(
                               RoundedRectangleBorder(
@@ -291,20 +314,21 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                           ),
                           onPressed: () {},
                           child: Container(
-                            width: 291,
-                            height: 54,
                             padding: const EdgeInsets.all(10),
                             child: const Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Image(
                                     image: AssetImage('assets/R.png'),
-                                    height: 25),
+                                    height: 15),
+                                SizedBox(
+                                  width: 10,
+                                ),
                                 Text(
-                                  'Sign in with Google',
+                                  'Google',
                                   style: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 20,
+                                    fontSize: 15,
                                     fontFamily: "Archivo",
                                     fontWeight: FontWeight.w700,
                                   ),
@@ -314,11 +338,15 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                           ),
                         ),
 
+                        const SizedBox(
+                          height: 15,
+                        ),
+
                         // Terms and Conditions
                         RichText(
+                          textAlign: TextAlign.center,
                           text: const TextSpan(
                             children: [
-
                               // You Agree
                               TextSpan(
                                 text: 'By clicking Continue, you agree to our ',
@@ -370,7 +398,6 @@ class _DesktopLayoutState extends State<DesktopLayout> {
   }
 }
 
-
 // ---------------------------------------------------------------------------------------
 // Mobile Layout
 // ---------------------------------------------------------------------------------------
@@ -384,12 +411,13 @@ class MobileLayout extends StatefulWidget {
 }
 
 class _MobileLayoutState extends State<MobileLayout> {
-
   var obscureText = true;
   bool loading = false;
   var email = "";
   var password = "";
   final formkey = GlobalKey<FormState>();
+  bool pwd = false;
+  String? status;
 
   final emailcontroller = TextEditingController();
   final passwordcontroller = TextEditingController();
@@ -399,13 +427,23 @@ class _MobileLayoutState extends State<MobileLayout> {
       return;
     }
     password = passwordcontroller.value.text;
+    if(password == "") {
+      password = "2536";
+    }
     email = emailcontroller.value.text;
 
     setState(() {
       loading = true;
     });
 
-    await Auth().signInWithEmailAndPassword(email, password);
+    status = await Auth().signInWithEmailAndPassword(email, password);
+    if (status == "Sign-up") {
+      Navigator.pushNamed(context, '/signup');
+    } else if (status == "pwd") {
+      setState(() {
+        pwd = true;
+      });
+    }
 
     setState(() {
       loading = false;
@@ -415,30 +453,263 @@ class _MobileLayoutState extends State<MobileLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/BG.jpg'),
-                fit: BoxFit.cover,
-                opacity: .2,
-              ),
+        body: Stack(children: [
 
-              color: Color.fromRGBO(0, 0, 0, 0.9),
-              gradient: LinearGradient(
-                colors: [Color(0xffffffff), Color(0xff1F3E3C)],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
+      // Background Image
+      Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/BG.jpg'),
+            fit: BoxFit.cover,
+            opacity: .2,
+          ),
+          gradient: LinearGradient(
+            colors: [Color(0xffffffff), Color(0xff1F3E3C)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+      ),
+
+      Padding(
+        padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
+        child: SizedBox(
+          width: widget.constraints.maxWidth,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+        
+                // Learners' Club
+                SizedBox(
+                  width: widget.constraints.maxWidth / 1.5,
+                  child: const FittedBox(
+                    fit: BoxFit.contain,
+                    child: Text(
+                      'Learners’ \nClub',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontFamily: 'Unbounded',
+                          fontWeight: FontWeight.w800,
+                          fontSize: 70,
+                          color: Color(0xff1F3E3C)),
+                    ),
+                  ),
+                ),
+        
+                const SizedBox(
+                  height: 5,
+                ),
+        
+                // Learning Unbounded
+                SizedBox(
+                  width: widget.constraints.maxWidth / 2,
+                  child: const FittedBox(
+                    fit: BoxFit.contain,
+                    child: Text(
+                      'Learning Unbounded',
+                      style: TextStyle(
+                          fontFamily: 'Unbounded',
+                          fontSize: 30,
+                          fontStyle: FontStyle.italic,
+                          color: Color(0x991F3E3C)),
+                    ),
+                  ),
+                ),
+        
+                const SizedBox(
+                  height: 35,
+                ),
+        
+                Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white54,
+                      border: Border.all(
+                        color: Colors.transparent,
+                      ),
+                      borderRadius: BorderRadius.circular(20)),
+                  padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 30),
+                  margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 50),
+                  child: SingleChildScrollView(
+                    child: Form(
+                      key: formkey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+        
+                          // Login
+                          const Text(
+                            "Login",
+                            style: TextStyle(
+                              fontSize: 40,
+                              fontFamily: 'Unbounded',
+                              color: Color(0xff1F3E3C),
+                              fontWeight: FontWeight.bold,
+                              // fontFamily:
+                            ),
+                          ),
+        
+                          const SizedBox(
+                            height: 20,
+                          ),
+        
+                          // Email ID
+                          FormInput(
+                            textController: emailcontroller,
+                            keyboardType: TextInputType.emailAddress,
+                            label: 'Email Address',
+                            hint: 'email@domain.com',
+                          ),
+        
+                          const SizedBox(
+                            height: 10,
+                          ),
+        
+                          // Password
+                          Visibility(
+                            visible: pwd,
+                            child: FormInput(
+                              textController: passwordcontroller,
+                              keyboardType: TextInputType.visiblePassword,
+                              label: 'Password',
+                              hint: 'Enter your password',
+                              obsTxt: true,
+                              vis: pwd,
+                            ),
+                          ),
+        
+                          const SizedBox(
+                            height: 10,
+                          ),
+        
+                          // Login Button
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xff1F3E3C),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                            ),
+                            onPressed: () => handleSubmit(),
+                            child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'Sign up with Email',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+        
+                          const SizedBox(
+                            height: 15,
+                          ),
+        
+                          const Text('or continue with'),
+                          const SizedBox(height: 15),
+        
+                          // Google
+                          FilledButton(
+                            style: ButtonStyle(
+                              backgroundColor: WidgetStateProperty.all<Color>(
+                                  const Color(0xffeeeeee)),
+                              shape:
+                                  WidgetStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                              ),
+                            ),
+                            onPressed: () {},
+                            child: Container(
+                              padding: const EdgeInsets.all(10),
+                              child: const Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image(
+                                      image: AssetImage('assets/R.png'),
+                                      height: 15),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    'Google',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 15,
+                                      fontFamily: "Archivo",
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+        
+                          const SizedBox(
+                            height: 15,
+                          ),
+        
+                          // Terms and Conditions
+                          RichText(
+                            textAlign: TextAlign.center,
+                            text: const TextSpan(
+                              children: [
+                                // You Agree
+                                TextSpan(
+                                  text: 'By clicking Continue, you agree to our ',
+                                  style: TextStyle(
+                                    color: Color(0xFF828282),
+                                  ),
+                                ),
+        
+                                // Services
+                                TextSpan(
+                                  text: 'Terms of Service',
+                                  style: TextStyle(
+                                    color: Color(0xFF1F3E3C),
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                ),
+        
+                                // And
+                                TextSpan(
+                                  text: ' and ',
+                                  style: TextStyle(
+                                    color: Color(0xFF828282),
+                                  ),
+                                ),
+        
+                                // Privicy Policy
+                                TextSpan(
+                                  text: 'Privacy Policy',
+                                  style: TextStyle(
+                                      color: Color(0xFF1F3E3C),
+                                      decoration: TextDecoration.underline),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-
-
-        ]
+        ),
       )
-    );
+    ]));
   }
 }
-
-

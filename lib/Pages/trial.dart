@@ -61,10 +61,10 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                 color: const Color(0xFFFFFFFF),
               ),
 
-              child: Column(
+              child: const Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
@@ -76,12 +76,12 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                     ],
                   ),
 
-                  const SizedBox(
+                  SizedBox(
                     height: 15,
                   ),
 
                   Padding(
-                    padding: const EdgeInsets.symmetric(
+                    padding: EdgeInsets.symmetric(
                       vertical: 20, horizontal: 20
                     ),
 
@@ -90,7 +90,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                       children: [
                         Column(
                           children: [
-                            const Text(
+                            Text(
                               'Name',
                               style: TextStyle(
                                 fontSize: 10,
@@ -125,7 +125,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                     ),
                   ),
 
-                  const SizedBox(
+                  SizedBox(
                     height: 15,
                   ),
                 ],
