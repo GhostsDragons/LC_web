@@ -11,11 +11,15 @@ import 'package:lc_web/firebase_options.dart';
 import 'package:lc_web/Pages/onboarding.dart';
 import 'package:lc_web/Pages/trial.dart';
 
+import 'Firebase/firebase_auth.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  Auth().signOut();
+
   runApp(const MyApp());
 }
 
@@ -44,7 +48,7 @@ class MyApp extends StatelessWidget {
         '/onboarding': (context) => const Onboarding(),
         // '/welcome' : (context) => const WelcomePageOne(),
         // '/profile' : (context) => const Profile(),
-        '/trial': (context) => const Trial(),
+        // '/trial': (context) => ParentWidget(),
       },
     );
   }

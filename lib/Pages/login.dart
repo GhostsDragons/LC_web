@@ -4,6 +4,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:lc_web/Firebase/firebase_auth.dart';
 import '../Functions/functions.dart';
 
+// TODO: Signup with google
+// TODO: Link to terms and Services and Privacy Policy
+// TODO: Fix the Coursel Slider for narrow screens
+
 class Login extends StatefulWidget {
   const Login({super.key});
 
@@ -12,40 +16,6 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return const Text("Hi");
-          } else {
-            return LayoutBuilder(builder: (context, constraints) {
-              if (constraints.maxWidth < 600) {
-                return MobileLayout(constraints: constraints);
-              } else {
-                return DesktopLayout(constraints: constraints);
-              }
-            });
-          }
-        });
-  }
-}
-
-// ---------------------------------------------------------------------------------------
-// Desktop Layout
-// ---------------------------------------------------------------------------------------
-
-class DesktopLayout extends StatefulWidget {
-  final BoxConstraints constraints;
-
-  const DesktopLayout({super.key, required this.constraints});
-
-  @override
-  State<DesktopLayout> createState() => _DesktopLayoutState();
-}
-
-class _DesktopLayoutState extends State<DesktopLayout> {
 
   var obscureText = true;
   bool loading = false;
@@ -58,14 +28,13 @@ class _DesktopLayoutState extends State<DesktopLayout> {
   final emailcontroller = TextEditingController();
   final passwordcontroller = TextEditingController();
 
-  handleSubmit() async {
+  void handleSubmit() async {
     if (!formkey.currentState!.validate()) {
       return;
     }
     password = passwordcontroller.value.text;
     if(password == "") {
       password = "2536";
-
     }
     email = emailcontroller.value.text;
 
@@ -81,10 +50,76 @@ class _DesktopLayoutState extends State<DesktopLayout> {
         pwd = true;
       });
     }
+
     setState(() {
       loading = false;
     });
   }
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return const Text("Hi");
+          } else {
+            return LayoutBuilder(builder: (context, constraints) {
+              if (constraints.maxWidth < 600) {
+                return MobileLayout(
+                    constraints: constraints,
+                  emailcontroller: emailcontroller,
+                  passwordcontroller: passwordcontroller,
+                  formkey: formkey,
+                  pwd: pwd,
+                  handleSubmit: handleSubmit,
+
+                );
+              } else {
+                return DesktopLayout(
+                  constraints: constraints,
+                  emailcontroller: emailcontroller,
+                  passwordcontroller: passwordcontroller,
+                  formkey: formkey,
+                  pwd: pwd,
+                  handleSubmit: handleSubmit,
+                );
+              }
+            });
+          }
+        });
+  }
+}
+
+// ---------------------------------------------------------------------------------------
+// Desktop Layout
+// ---------------------------------------------------------------------------------------
+
+class DesktopLayout extends StatefulWidget {
+  final BoxConstraints constraints;
+  final TextEditingController emailcontroller, passwordcontroller;
+  final GlobalKey<FormState> formkey;
+  final bool pwd;
+  final Function() handleSubmit;
+  
+  const DesktopLayout({super.key,
+    required this.constraints,
+    required this.emailcontroller,
+    required this.passwordcontroller,
+    required this.formkey,
+    required this.pwd,
+    required this.handleSubmit,
+
+  });
+  
+
+  @override
+  State<DesktopLayout> createState() => _DesktopLayoutState();
+}
+
+class _DesktopLayoutState extends State<DesktopLayout> {
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -218,7 +253,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                     const EdgeInsets.symmetric(vertical: 100, horizontal: 50),
                 child: SingleChildScrollView(
                   child: Form(
-                    key: formkey,
+                    key: widget.formkey,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -241,7 +276,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
 
                         // Email ID
                         FormInput(
-                          textController: emailcontroller,
+                          textController: widget.emailcontroller,
                           keyboardType: TextInputType.emailAddress,
                           label: 'Email Address',
                           hint: 'email@domain.com',
@@ -253,14 +288,14 @@ class _DesktopLayoutState extends State<DesktopLayout> {
 
                         // Password
                         Visibility(
-                          visible: pwd,
+                          visible: widget.pwd,
                           child: FormInput(
-                            textController: passwordcontroller,
+                            textController: widget.passwordcontroller,
                             keyboardType: TextInputType.visiblePassword,
                             label: 'Password',
                             hint: 'Enter your password',
                             obsTxt: true,
-                            vis: pwd,
+                            vis: widget.pwd,
                           ),
                         ),
 
@@ -276,7 +311,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                               borderRadius: BorderRadius.circular(5),
                             ),
                           ),
-                          onPressed: () => handleSubmit(),
+                          onPressed: () => widget.handleSubmit(),
                           child: const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -404,51 +439,28 @@ class _DesktopLayoutState extends State<DesktopLayout> {
 
 class MobileLayout extends StatefulWidget {
   final BoxConstraints constraints;
-  const MobileLayout({super.key, required this.constraints});
+  final TextEditingController emailcontroller, passwordcontroller;
+  final GlobalKey<FormState> formkey;
+  final bool pwd;
+  final Function() handleSubmit;
+
+  const MobileLayout({
+    super.key,
+    required this.constraints,
+    required this.emailcontroller,
+    required this.passwordcontroller,
+    required this.formkey,
+    required this.pwd,
+    required this.handleSubmit,
+
+
+  });
 
   @override
   State<MobileLayout> createState() => _MobileLayoutState();
 }
 
 class _MobileLayoutState extends State<MobileLayout> {
-  var obscureText = true;
-  bool loading = false;
-  var email = "";
-  var password = "";
-  final formkey = GlobalKey<FormState>();
-  bool pwd = false;
-  String? status;
-
-  final emailcontroller = TextEditingController();
-  final passwordcontroller = TextEditingController();
-
-  handleSubmit() async {
-    if (!formkey.currentState!.validate()) {
-      return;
-    }
-    password = passwordcontroller.value.text;
-    if(password == "") {
-      password = "2536";
-    }
-    email = emailcontroller.value.text;
-
-    setState(() {
-      loading = true;
-    });
-
-    status = await Auth().signInWithEmailAndPassword(email, password);
-    if (status == "Sign-up") {
-      Navigator.pushNamed(context, '/signup');
-    } else if (status == "pwd") {
-      setState(() {
-        pwd = true;
-      });
-    }
-
-    setState(() {
-      loading = false;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -480,7 +492,7 @@ class _MobileLayoutState extends State<MobileLayout> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-        
+
                 // Learners' Club
                 SizedBox(
                   width: widget.constraints.maxWidth / 1.5,
@@ -497,11 +509,11 @@ class _MobileLayoutState extends State<MobileLayout> {
                     ),
                   ),
                 ),
-        
+
                 const SizedBox(
                   height: 5,
                 ),
-        
+
                 // Learning Unbounded
                 SizedBox(
                   width: widget.constraints.maxWidth / 2,
@@ -517,11 +529,11 @@ class _MobileLayoutState extends State<MobileLayout> {
                     ),
                   ),
                 ),
-        
+
                 const SizedBox(
                   height: 35,
                 ),
-        
+
                 Container(
                   decoration: BoxDecoration(
                       color: Colors.white54,
@@ -533,11 +545,11 @@ class _MobileLayoutState extends State<MobileLayout> {
                   margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 50),
                   child: SingleChildScrollView(
                     child: Form(
-                      key: formkey,
+                      key: widget.formkey,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-        
+
                           // Login
                           const Text(
                             "Login",
@@ -549,40 +561,40 @@ class _MobileLayoutState extends State<MobileLayout> {
                               // fontFamily:
                             ),
                           ),
-        
+
                           const SizedBox(
                             height: 20,
                           ),
-        
+
                           // Email ID
                           FormInput(
-                            textController: emailcontroller,
+                            textController: widget.emailcontroller,
                             keyboardType: TextInputType.emailAddress,
                             label: 'Email Address',
                             hint: 'email@domain.com',
                           ),
-        
+
                           const SizedBox(
                             height: 10,
                           ),
-        
+
                           // Password
                           Visibility(
-                            visible: pwd,
+                            visible: widget.pwd,
                             child: FormInput(
-                              textController: passwordcontroller,
+                              textController: widget.passwordcontroller,
                               keyboardType: TextInputType.visiblePassword,
                               label: 'Password',
                               hint: 'Enter your password',
                               obsTxt: true,
-                              vis: pwd,
+                              vis: widget.pwd,
                             ),
                           ),
-        
+
                           const SizedBox(
                             height: 10,
                           ),
-        
+
                           // Login Button
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
@@ -591,7 +603,7 @@ class _MobileLayoutState extends State<MobileLayout> {
                                 borderRadius: BorderRadius.circular(5),
                               ),
                             ),
-                            onPressed: () => handleSubmit(),
+                            onPressed: () => widget.handleSubmit(),
                             child: const Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -607,14 +619,14 @@ class _MobileLayoutState extends State<MobileLayout> {
                               ],
                             ),
                           ),
-        
+
                           const SizedBox(
                             height: 15,
                           ),
-        
+
                           const Text('or continue with'),
                           const SizedBox(height: 15),
-        
+
                           // Google
                           FilledButton(
                             style: ButtonStyle(
@@ -652,11 +664,11 @@ class _MobileLayoutState extends State<MobileLayout> {
                               ),
                             ),
                           ),
-        
+
                           const SizedBox(
                             height: 15,
                           ),
-        
+
                           // Terms and Conditions
                           RichText(
                             textAlign: TextAlign.center,
@@ -669,7 +681,7 @@ class _MobileLayoutState extends State<MobileLayout> {
                                     color: Color(0xFF828282),
                                   ),
                                 ),
-        
+
                                 // Services
                                 TextSpan(
                                   text: 'Terms of Service',
@@ -678,7 +690,7 @@ class _MobileLayoutState extends State<MobileLayout> {
                                     decoration: TextDecoration.underline,
                                   ),
                                 ),
-        
+
                                 // And
                                 TextSpan(
                                   text: ' and ',
@@ -686,7 +698,7 @@ class _MobileLayoutState extends State<MobileLayout> {
                                     color: Color(0xFF828282),
                                   ),
                                 ),
-        
+
                                 // Privicy Policy
                                 TextSpan(
                                   text: 'Privacy Policy',
