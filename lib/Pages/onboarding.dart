@@ -40,12 +40,12 @@ class DesktopLayout extends StatefulWidget {
 }
 
 class _DesktopLayoutState extends State<DesktopLayout> {
-  String? name;
-  String? grade;
-  String? board;
+  String? name = "";
+  String? grade = "";
+  String? board = "";
 
-  List<String> boardOptions = ['CBSE', 'ICSE', 'IGCSE','SSC'];
-  List<String> gradeOptions = ['Grade 9', 'Grade 10', 'Grade 11','Grade 12'];
+  List<String> boardOptions = ['CBSE', 'ICSE', 'IGCSE', 'SSC'];
+  List<String> gradeOptions = ['Grade 9', 'Grade 10', 'Grade 11', 'Grade 12'];
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +64,8 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(10.0),
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 20.0, vertical: 20.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -75,18 +76,14 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-
                       const SizedBox(height: 40.0),
-
                       RichText(
                         text: const TextSpan(children: [
                           TextSpan(text: 'Name'),
                         ]),
                         textAlign: TextAlign.left,
                       ),
-
                       const SizedBox(width: 20.0),
-
                       TextFormField(
                         initialValue: '',
                         decoration: InputDecoration(
@@ -105,33 +102,33 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                           return null;
                         },
                       ),
-
                       const SizedBox(height: 10.0),
-
                       DropdownButton<String>(
                         value: grade,
                         hint: const Text('Select Grade'),
-                        items: gradeOptions.map<DropdownMenuItem<String>>((String value) => DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        )).toList(),
+                        items: gradeOptions
+                            .map<DropdownMenuItem<String>>(
+                                (String value) => DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    ))
+                            .toList(),
                         onChanged: (value) => setState(() => grade = value!),
                       ),
-
                       const SizedBox(height: 10.0),
-
                       DropdownButton<String>(
                         value: board,
                         hint: const Text('Select Board'),
-                        items: boardOptions.map<DropdownMenuItem<String>>((String value) => DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        )).toList(),
+                        items: boardOptions
+                            .map<DropdownMenuItem<String>>(
+                                (String value) => DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    ))
+                            .toList(),
                         onChanged: (value) => setState(() => board = value!),
                       ),
-
                       const SizedBox(height: 10.0),
-
                       ElevatedButton(
                         onPressed: () {},
                         child: const Text('Submit'),
@@ -146,7 +143,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
           // ---------------------------------------------------------------------------------------
           // Right hand side
           // ---------------------------------------------------------------------------------------
-          
+
           Expanded(
             flex: 1,
             child: Center(
@@ -167,18 +164,15 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                         ),
                       ],
                     ),
-
                     const SizedBox(
                       height: 10,
                     ),
-
                     Text(
                       'Hello there, $name',
                       style: const TextStyle(
                         fontSize: 40,
                       ),
                     ),
-
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -186,13 +180,11 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                           '$grade',
                           style: const TextStyle(fontSize: 20),
                         ),
-                        
-                        const Text(' | ', style: TextStyle(fontSize: 25),),
-
-                        Text(
-                          '$board',
-                          style: const TextStyle(fontSize: 20)
+                        const Text(
+                          ' | ',
+                          style: TextStyle(fontSize: 25),
                         ),
+                        Text('$board', style: const TextStyle(fontSize: 20)),
                       ],
                     )
                   ],

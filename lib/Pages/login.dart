@@ -16,7 +16,6 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-
   var obscureText = true;
   bool loading = false;
   var email = "";
@@ -25,7 +24,7 @@ class _LoginState extends State<Login> {
   bool pwd = false;
   String? status;
 
-  final emailcontroller = TextEditingController();
+  final emailController = TextEditingController();
   final passwordcontroller = TextEditingController();
 
   void handleSubmit() async {
@@ -33,10 +32,10 @@ class _LoginState extends State<Login> {
       return;
     }
     password = passwordcontroller.value.text;
-    if(password == "") {
+    if (password == "") {
       password = "2536";
     }
-    email = emailcontroller.value.text;
+    email = emailController.value.text;
 
     setState(() {
       loading = true;
@@ -67,18 +66,17 @@ class _LoginState extends State<Login> {
             return LayoutBuilder(builder: (context, constraints) {
               if (constraints.maxWidth < 600) {
                 return MobileLayout(
-                    constraints: constraints,
-                  emailcontroller: emailcontroller,
+                  constraints: constraints,
+                  emailController: emailController,
                   passwordcontroller: passwordcontroller,
                   formkey: formkey,
                   pwd: pwd,
                   handleSubmit: handleSubmit,
-
                 );
               } else {
                 return DesktopLayout(
                   constraints: constraints,
-                  emailcontroller: emailcontroller,
+                  emailController: emailController,
                   passwordcontroller: passwordcontroller,
                   formkey: formkey,
                   pwd: pwd,
@@ -97,30 +95,26 @@ class _LoginState extends State<Login> {
 
 class DesktopLayout extends StatefulWidget {
   final BoxConstraints constraints;
-  final TextEditingController emailcontroller, passwordcontroller;
+  final TextEditingController emailController, passwordcontroller;
   final GlobalKey<FormState> formkey;
   final bool pwd;
   final Function() handleSubmit;
-  
-  const DesktopLayout({super.key,
+
+  const DesktopLayout({
+    super.key,
     required this.constraints,
-    required this.emailcontroller,
+    required this.emailController,
     required this.passwordcontroller,
     required this.formkey,
     required this.pwd,
     required this.handleSubmit,
-
   });
-  
 
   @override
   State<DesktopLayout> createState() => _DesktopLayoutState();
 }
 
 class _DesktopLayoutState extends State<DesktopLayout> {
-
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -257,7 +251,6 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-
                         // Login
                         const Text(
                           "Login",
@@ -276,7 +269,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
 
                         // Email ID
                         FormInput(
-                          textController: widget.emailcontroller,
+                          textController: widget.emailController,
                           keyboardType: TextInputType.emailAddress,
                           label: 'Email Address',
                           hint: 'email@domain.com',
@@ -341,7 +334,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                             backgroundColor: WidgetStateProperty.all<Color>(
                                 const Color(0xffeeeeee)),
                             shape:
-                            WidgetStateProperty.all<RoundedRectangleBorder>(
+                                WidgetStateProperty.all<RoundedRectangleBorder>(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5),
                               ),
@@ -417,6 +410,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                             ],
                           ),
                         ),
+
                         const SizedBox(
                           height: 10,
                         ),
@@ -439,7 +433,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
 
 class MobileLayout extends StatefulWidget {
   final BoxConstraints constraints;
-  final TextEditingController emailcontroller, passwordcontroller;
+  final TextEditingController emailController, passwordcontroller;
   final GlobalKey<FormState> formkey;
   final bool pwd;
   final Function() handleSubmit;
@@ -447,13 +441,11 @@ class MobileLayout extends StatefulWidget {
   const MobileLayout({
     super.key,
     required this.constraints,
-    required this.emailcontroller,
+    required this.emailController,
     required this.passwordcontroller,
     required this.formkey,
     required this.pwd,
     required this.handleSubmit,
-
-
   });
 
   @override
@@ -461,12 +453,10 @@ class MobileLayout extends StatefulWidget {
 }
 
 class _MobileLayoutState extends State<MobileLayout> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Stack(children: [
-
       // Background Image
       Container(
         decoration: const BoxDecoration(
@@ -476,7 +466,7 @@ class _MobileLayoutState extends State<MobileLayout> {
             opacity: .2,
           ),
           gradient: LinearGradient(
-            colors: [Color(0xffffffff), Color(0xff1F3E3C)],
+            colors: [Color(0xffffffff), Color(0xff1f3e3c)],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -485,240 +475,235 @@ class _MobileLayoutState extends State<MobileLayout> {
 
       Padding(
         padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-        child: SizedBox(
-          width: widget.constraints.maxWidth,
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // Learners' Club
+              SizedBox(
+                width: widget.constraints.maxWidth / 1.5,
+                child: const FittedBox(
+                  fit: BoxFit.contain,
+                  child: Text(
+                    'Learners’ \nClub',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontFamily: 'Unbounded',
+                        fontWeight: FontWeight.w800,
+                        fontSize: 70,
+                        color: Color(0xff1F3E3C)),
+                  ),
+                ),
+              ),
 
-                // Learners' Club
-                SizedBox(
-                  width: widget.constraints.maxWidth / 1.5,
-                  child: const FittedBox(
-                    fit: BoxFit.contain,
-                    child: Text(
-                      'Learners’ \nClub',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
+              const SizedBox(
+                height: 5,
+              ),
+
+              // Learning Unbounded
+              SizedBox(
+                width: widget.constraints.maxWidth / 2,
+                child: const FittedBox(
+                  fit: BoxFit.contain,
+                  child: Text(
+                    'Learning Unbounded',
+                    style: TextStyle(
+                        fontFamily: 'Unbounded',
+                        fontSize: 30,
+                        fontStyle: FontStyle.italic,
+                        color: Color(0x991F3E3C)),
+                  ),
+                ),
+              ),
+
+              const SizedBox(
+                height: 35,
+              ),
+
+              Container(
+                decoration: BoxDecoration(
+                    color: Colors.white54,
+                    border: Border.all(
+                      color: Colors.transparent,
+                    ),
+                    borderRadius: BorderRadius.circular(20)),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 50, horizontal: 30),
+                margin:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                child: Form(
+                  key: widget.formkey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      // Login
+                      const Text(
+                        "Login",
+                        style: TextStyle(
+                          fontSize: 40,
                           fontFamily: 'Unbounded',
-                          fontWeight: FontWeight.w800,
-                          fontSize: 70,
-                          color: Color(0xff1F3E3C)),
-                    ),
-                  ),
-                ),
-
-                const SizedBox(
-                  height: 5,
-                ),
-
-                // Learning Unbounded
-                SizedBox(
-                  width: widget.constraints.maxWidth / 2,
-                  child: const FittedBox(
-                    fit: BoxFit.contain,
-                    child: Text(
-                      'Learning Unbounded',
-                      style: TextStyle(
-                          fontFamily: 'Unbounded',
-                          fontSize: 30,
-                          fontStyle: FontStyle.italic,
-                          color: Color(0x991F3E3C)),
-                    ),
-                  ),
-                ),
-
-                const SizedBox(
-                  height: 35,
-                ),
-
-                Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white54,
-                      border: Border.all(
-                        color: Colors.transparent,
+                          color: Color(0xff1F3E3C),
+                          fontWeight: FontWeight.bold,
+                          // fontFamily:
+                        ),
                       ),
-                      borderRadius: BorderRadius.circular(20)),
-                  padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 30),
-                  margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 50),
-                  child: SingleChildScrollView(
-                    child: Form(
-                      key: widget.formkey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
 
-                          // Login
-                          const Text(
-                            "Login",
-                            style: TextStyle(
-                              fontSize: 40,
-                              fontFamily: 'Unbounded',
-                              color: Color(0xff1F3E3C),
-                              fontWeight: FontWeight.bold,
-                              // fontFamily:
-                            ),
-                          ),
-
-                          const SizedBox(
-                            height: 20,
-                          ),
-
-                          // Email ID
-                          FormInput(
-                            textController: widget.emailcontroller,
-                            keyboardType: TextInputType.emailAddress,
-                            label: 'Email Address',
-                            hint: 'email@domain.com',
-                          ),
-
-                          const SizedBox(
-                            height: 10,
-                          ),
-
-                          // Password
-                          Visibility(
-                            visible: widget.pwd,
-                            child: FormInput(
-                              textController: widget.passwordcontroller,
-                              keyboardType: TextInputType.visiblePassword,
-                              label: 'Password',
-                              hint: 'Enter your password',
-                              obsTxt: true,
-                              vis: widget.pwd,
-                            ),
-                          ),
-
-                          const SizedBox(
-                            height: 10,
-                          ),
-
-                          // Login Button
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xff1F3E3C),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                            ),
-                            onPressed: () => widget.handleSubmit(),
-                            child: const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text(
-                                    'Sign up with Email',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-
-                          const SizedBox(
-                            height: 15,
-                          ),
-
-                          const Text('or continue with'),
-                          const SizedBox(height: 15),
-
-                          // Google
-                          FilledButton(
-                            style: ButtonStyle(
-                              backgroundColor: WidgetStateProperty.all<Color>(
-                                  const Color(0xffeeeeee)),
-                              shape:
-                                  WidgetStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                              ),
-                            ),
-                            onPressed: () {},
-                            child: Container(
-                              padding: const EdgeInsets.all(10),
-                              child: const Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image(
-                                      image: AssetImage('assets/R.png'),
-                                      height: 15),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text(
-                                    'Google',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15,
-                                      fontFamily: "Archivo",
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-
-                          const SizedBox(
-                            height: 15,
-                          ),
-
-                          // Terms and Conditions
-                          RichText(
-                            textAlign: TextAlign.center,
-                            text: const TextSpan(
-                              children: [
-                                // You Agree
-                                TextSpan(
-                                  text: 'By clicking Continue, you agree to our ',
-                                  style: TextStyle(
-                                    color: Color(0xFF828282),
-                                  ),
-                                ),
-
-                                // Services
-                                TextSpan(
-                                  text: 'Terms of Service',
-                                  style: TextStyle(
-                                    color: Color(0xFF1F3E3C),
-                                    decoration: TextDecoration.underline,
-                                  ),
-                                ),
-
-                                // And
-                                TextSpan(
-                                  text: ' and ',
-                                  style: TextStyle(
-                                    color: Color(0xFF828282),
-                                  ),
-                                ),
-
-                                // Privicy Policy
-                                TextSpan(
-                                  text: 'Privacy Policy',
-                                  style: TextStyle(
-                                      color: Color(0xFF1F3E3C),
-                                      decoration: TextDecoration.underline),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                        ],
+                      const SizedBox(
+                        height: 20,
                       ),
-                    ),
+
+                      // Email ID
+                      FormInput(
+                        textController: widget.emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        label: 'Email Address',
+                        hint: 'email@domain.com',
+                      ),
+
+                      const SizedBox(
+                        height: 10,
+                      ),
+
+                      // Password
+                      Visibility(
+                        visible: widget.pwd,
+                        child: FormInput(
+                          textController: widget.passwordcontroller,
+                          keyboardType: TextInputType.visiblePassword,
+                          label: 'Password',
+                          hint: 'Enter password',
+                          obsTxt: true,
+                          vis: widget.pwd,
+                        ),
+                      ),
+
+                      const SizedBox(
+                        height: 10,
+                      ),
+
+                      // Login Button
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xff1F3E3C),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                        ),
+                        onPressed: () => widget.handleSubmit(),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(
+                                'Sign up with Email',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      const SizedBox(
+                        height: 15,
+                      ),
+
+                      const Text('or continue with'),
+                      const SizedBox(height: 15),
+
+                      // Google
+                      FilledButton(
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStateProperty.all<Color>(
+                              const Color(0xffeeeeee)),
+                          shape:
+                              WidgetStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                          ),
+                        ),
+                        onPressed: () {},
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image(
+                                  image: AssetImage('assets/R.png'),
+                                  height: 15),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                'Google',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 15,
+                                  fontFamily: "Archivo",
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(
+                        height: 15,
+                      ),
+
+                      // Terms and Conditions
+                      RichText(
+                        textAlign: TextAlign.center,
+                        text: const TextSpan(
+                          children: [
+                            // You Agree
+                            TextSpan(
+                              text: 'By clicking Continue, you agree to our ',
+                              style: TextStyle(
+                                color: Color(0xFF828282),
+                              ),
+                            ),
+
+                            // Services
+                            TextSpan(
+                              text: 'Terms of Service',
+                              style: TextStyle(
+                                color: Color(0xFF1F3E3C),
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+
+                            // And
+                            TextSpan(
+                              text: ' and ',
+                              style: TextStyle(
+                                color: Color(0xFF828282),
+                              ),
+                            ),
+
+                            // Privicy Policy
+                            TextSpan(
+                              text: 'Privacy Policy',
+                              style: TextStyle(
+                                  color: Color(0xFF1F3E3C),
+                                  decoration: TextDecoration.underline),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       )

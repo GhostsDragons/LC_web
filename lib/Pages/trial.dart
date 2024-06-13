@@ -46,21 +46,19 @@ class _DesktopLayoutState extends State<DesktopLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-    body: Row(
+        body: Row(
       children: [
         Expanded(
           flex: 1,
           child: Container(
             color: const Color(0xFF1F3E3C),
-
             child: Container(
-              margin: const EdgeInsets.symmetric(vertical: 100, horizontal: 100),
-
+              margin:
+                  const EdgeInsets.symmetric(vertical: 100, horizontal: 100),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
                 color: const Color(0xFFFFFFFF),
               ),
-
               child: const Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -75,16 +73,11 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                       ),
                     ],
                   ),
-
                   SizedBox(
                     height: 15,
                   ),
-
                   Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: 20, horizontal: 20
-                    ),
-
+                    padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -118,13 +111,11 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                             //     },
                             //   ),
                             // ),
-
                           ],
                         )
                       ],
                     ),
                   ),
-
                   SizedBox(
                     height: 15,
                   ),
@@ -133,20 +124,15 @@ class _DesktopLayoutState extends State<DesktopLayout> {
             ),
           ),
         ),
-
         Expanded(
           flex: 1,
           child: Center(
             child: Container(
               width: 350,
               height: 500,
-              decoration:
-                BoxDecoration(
-                  border: Border.all(
-                    color: Colors.black
-                  ),
-                ),
-
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.black),
+              ),
               child: const Column(
                 children: [
                   Row(
@@ -158,18 +144,15 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                       ),
                     ],
                   ),
-
                   SizedBox(
                     height: 10,
                   ),
-
                   Text(
                     'name goes here',
                     style: TextStyle(
                       fontSize: 40,
                     ),
                   ),
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -177,9 +160,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                         'Grade goes here',
                         style: TextStyle(fontSize: 20),
                       ),
-
                       Text(' | '),
-
                       Text('Board goes here', style: TextStyle(fontSize: 20)),
                     ],
                   )

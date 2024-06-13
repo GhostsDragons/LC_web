@@ -67,15 +67,14 @@ class Reviews extends StatelessWidget {
 }
 
 class FormInput extends StatelessWidget {
-  const FormInput({
-    super.key,
-    required this.textController,
-    required this.keyboardType,
-    required this.label,
-    required this.hint,
-    this.obsTxt = false,
-    this.vis = true
-  });
+  const FormInput(
+      {super.key,
+      required this.textController,
+      required this.keyboardType,
+      required this.label,
+      required this.hint,
+      this.obsTxt = false,
+      this.vis = true});
 
   final TextEditingController textController;
   final TextInputType keyboardType;
@@ -90,7 +89,18 @@ class FormInput extends StatelessWidget {
       obscureText: obsTxt,
       decoration: InputDecoration(
         labelText: label,
+        labelStyle: TextStyle(
+            fontFamily: 'Inter',
+            color: Colors.grey[700],
+            fontSize: 20,
+            fontWeight: FontWeight.w500),
         hintText: hint,
+        hintStyle: TextStyle(
+            fontFamily: 'Inter',
+            color: Colors.grey[700],
+            fontSize: 20,
+            fontWeight: FontWeight.w500),
+        filled: true,
         fillColor: Colors.white,
         contentPadding: const EdgeInsets.all(15),
         border: OutlineInputBorder(

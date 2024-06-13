@@ -9,7 +9,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:lc_web/firebase_options.dart';
 // import 'package:lc_web/Pages/transition_page.dart';
 import 'package:lc_web/Pages/onboarding.dart';
-import 'package:lc_web/Pages/trial.dart';
+// import 'package:lc_web/Pages/trial.dart';
 
 import 'Firebase/firebase_auth.dart';
 

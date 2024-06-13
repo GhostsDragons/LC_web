@@ -38,7 +38,8 @@ class Auth {
     }
   }
 
-  Future<String?> signInWithEmailAndPassword(String email, String password) async {
+  Future<String?> signInWithEmailAndPassword(
+      String email, String password) async {
     try {
       final user = await auth.signInWithEmailAndPassword(
           email: email, password: password);
@@ -56,10 +57,10 @@ class Auth {
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 2,
         );
-        return("Sign-up");
+        return ("Sign-up");
       } else if (e.code == 'wrong-password') {
         if (password == "2536") {
-          return("pwd");
+          return ("pwd");
         }
         Fluttertoast.showToast(
           msg: 'Wrong password',
