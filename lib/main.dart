@@ -8,7 +8,7 @@ import 'package:firebase_core/firebase_core.dart';
 // import 'package:lc_web/Pages/welcome_1.dart';
 import 'package:lc_web/firebase_options.dart';
 // import 'package:lc_web/Pages/transition_page.dart';
-import 'package:lc_web/Pages/onboarding.dart';
+// import 'package:lc_web/Pages/onboarding.dart';
 // import 'package:lc_web/Pages/trial.dart';
 
 import 'Firebase/firebase_auth.dart';
@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
         // '/home': (context) => const HomePage(),
         // '/settings': (context) => const Settings(),
         // '/transition': (context) => const TransitionPage(),
-        '/onboarding': (context) => const Onboarding(),
+        // '/onboarding': (context) => const Onboarding(),
         // '/welcome' : (context) => const WelcomePageOne(),
         // '/profile' : (context) => const Profile(),
         // '/trial': (context) => ParentWidget(),

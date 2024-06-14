@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:lc_web/Firebase/firebase_auth.dart';
 import '../Functions/functions.dart';
+import 'package:lc_web/Pages/onboarding.dart';
 
 class Signup extends StatefulWidget {
   const Signup({super.key});
@@ -10,20 +12,78 @@ class Signup extends StatefulWidget {
 }
 
 class _SignupState extends State<Signup> {
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  final emailController = TextEditingController();
+  final passController = TextEditingController();
+  final confPassController = TextEditingController();
+
+  bool loading = false;
+  var email = "";
+  var password = "";
+  var repeat = "";
+
+  void handleSubmit() async {
+    if (!formKey.currentState!.validate()) {
+      return;
+    }
+    email = emailController.value.text;
+    password = passController.value.text;
+    repeat = confPassController.text;
+
+    // setState(() {
+    //   loading = true;
+    // });
+
+    if (repeat == password)
+    {
+      await Auth().registerWithEmailAndPassword(email, password);
+    }
+    else
+    {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Passwords do not match'),
+        ),
+      );
+    }
+
+    // setState(() {
+    //   loading = false;
+    // }
+    // );
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return const Text('Hi');
+          return const Onboarding();
+          // Navigator.push(context, '/onboarding' as Route<Object?>);
         } else {
           return LayoutBuilder(
             builder: (context, constraints) {
               if (constraints.maxWidth < 600) {
-                return MobileLayout(constraints: constraints);
+                return MobileLayout(
+                    constraints: constraints,
+                    emailController: emailController,
+                    passController: passController,
+                    confPassController: confPassController,
+                    formKey: formKey,
+                    handleSubmit: handleSubmit,
+                );
               } else {
-                return DesktopLayout(constraints: constraints);
+                return DesktopLayout(
+                  constraints: constraints,
+                  emailController: emailController,
+                  passController: passController,
+                  confPassController: confPassController,
+                  formKey: formKey,
+                  handleSubmit: handleSubmit,
+
+                );
               }
             },
           );
@@ -38,40 +98,53 @@ class _SignupState extends State<Signup> {
 // ---------------------------------------------------------------------------------------
 
 class DesktopLayout extends StatefulWidget {
+
   final BoxConstraints constraints;
-  const DesktopLayout({super.key, required this.constraints});
+  final TextEditingController emailController,
+      passController,
+      confPassController;
+  final GlobalKey<FormState> formKey;
+  final Function() handleSubmit;
+
+  const DesktopLayout({
+    super.key,
+    required this.constraints,
+    required this.emailController,
+    required this.passController,
+    required this.confPassController,
+    required this.formKey,
+    required this.handleSubmit
+  });
 
   @override
   State<DesktopLayout> createState() => _DesktopLayoutState();
 }
 
 class _DesktopLayoutState extends State<DesktopLayout> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  final emailController = TextEditingController();
-  final pass1Controller = TextEditingController();
-  final pass2Controller = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Stack(
       children: [
+
         Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/BG.jpg'),
-              fit: BoxFit.cover,
-              opacity: 0.2,
-            ),
-            color: Color.fromRGBO(0, 0, 0, 0.9),
-            gradient: LinearGradient(
-              colors: [Color(0xffffffff), Color(0xff1F3E3C)],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/BG.jpg'),
+            fit: BoxFit.cover,
           ),
         ),
+      ),
+
+      Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xddffffff), Color(0xdd1f3e3c)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+      ),
         Center(
           child: Container(
             decoration: BoxDecoration(
@@ -84,7 +157,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
             width: widget.constraints.maxWidth / 3,
             child: SingleChildScrollView(
               child: Form(
-                key: _formKey,
+                key: widget.formKey,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -127,7 +200,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                     ),
 
                     FormInput(
-                      textController: emailController,
+                      textController: widget.emailController,
                       keyboardType: TextInputType.emailAddress,
                       label: 'Email Address',
                       hint: 'email@domain.com',
@@ -138,10 +211,11 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                     ),
 
                     FormInput(
-                      textController: pass1Controller,
+                      textController: widget.passController,
                       keyboardType: TextInputType.visiblePassword,
                       label: 'Password',
                       hint: 'Enter your password',
+                      obsTxt: true,
                     ),
 
                     const SizedBox(
@@ -149,10 +223,11 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                     ),
 
                     FormInput(
-                      textController: pass2Controller,
+                      textController: widget.confPassController,
                       keyboardType: TextInputType.visiblePassword,
                       label: 'Confirm Password',
                       hint: 'Confirm your password',
+                      obsTxt: true,
                     ),
 
                     const SizedBox(
@@ -166,7 +241,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                           borderRadius: BorderRadius.circular(5),
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () => widget.handleSubmit(),
                       child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -246,39 +321,57 @@ class _DesktopLayoutState extends State<DesktopLayout> {
 // ---------------------------------------------------------------------------------------
 
 class MobileLayout extends StatefulWidget {
+
   final BoxConstraints constraints;
-  const MobileLayout({super.key, required this.constraints});
+  final TextEditingController emailController,
+      passController,
+      confPassController;
+  final GlobalKey<FormState> formKey;
+  final Function() handleSubmit;
+
+  const MobileLayout({
+    super.key,
+    required this.constraints,
+    required this.emailController,
+    required this.passController,
+    required this.confPassController,
+    required this.formKey,
+    required this.handleSubmit
+
+  });
 
   @override
   State<MobileLayout> createState() => _MobileLayoutState();
 }
 
 class _MobileLayoutState extends State<MobileLayout> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final emailController = TextEditingController();
-  final pass1Controller = TextEditingController();
-  final pass2Controller = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
+
+          // Background Image
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage('assets/BG.jpg'),
                 fit: BoxFit.cover,
-                opacity: 0.2,
               ),
-              color: Color.fromRGBO(0, 0, 0, 0.9),
+            ),
+          ),
+
+          // Background Gradient
+          Container(
+            decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Color(0xffffffff), Color(0xff1F3E3C)],
+                colors: [Color(0xddffffff), Color(0xdd1f3e3c)],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
               ),
             ),
           ),
+
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
             child: SingleChildScrollView(
@@ -343,7 +436,7 @@ class _MobileLayoutState extends State<MobileLayout> {
                     margin: const EdgeInsets.symmetric(
                         vertical: 10, horizontal: 25),
                     child: Form(
-                      key: _formKey,
+                      key: widget.formKey,
                       child: Column(
                         children: [
                           // Signup
@@ -386,7 +479,7 @@ class _MobileLayoutState extends State<MobileLayout> {
 
                           // Email ID
                           FormInput(
-                            textController: emailController,
+                            textController: widget.emailController,
                             keyboardType: TextInputType.emailAddress,
                             label: 'Email Address',
                             hint: 'email@domain.com',
@@ -398,7 +491,7 @@ class _MobileLayoutState extends State<MobileLayout> {
 
                           // Password
                           FormInput(
-                            textController: pass1Controller,
+                            textController: widget.passController,
                             keyboardType: TextInputType.visiblePassword,
                             label: 'Password',
                             hint: 'Enter password',
@@ -411,7 +504,7 @@ class _MobileLayoutState extends State<MobileLayout> {
 
                           // Confirm Password
                           FormInput(
-                            textController: pass2Controller,
+                            textController: widget.confPassController,
                             keyboardType: TextInputType.visiblePassword,
                             label: 'Confirm Password',
                             hint: 'Confrim password',
@@ -430,7 +523,7 @@ class _MobileLayoutState extends State<MobileLayout> {
                                 borderRadius: BorderRadius.circular(5),
                               ),
                             ),
-                            onPressed: () {},
+                            onPressed: () => widget.handleSubmit(),
                             child: const Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
