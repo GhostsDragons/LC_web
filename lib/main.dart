@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 // import 'package:lc_web/Pages/profile.dart';
 import 'package:lc_web/Pages/signup.dart';
-// import 'package:lc_web/Pages/home.dart';
+import 'package:lc_web/Pages/home.dart';
 // import 'package:lc_web/Pages/settings.dart';
 import 'package:lc_web/Pages/login.dart';
 import 'package:firebase_core/firebase_core.dart';
 // import 'package:lc_web/Pages/welcome_1.dart';
 import 'package:lc_web/firebase_options.dart';
-// import 'package:lc_web/Pages/transition_page.dart';
+import 'package:lc_web/Pages/transition_page.dart';
 import 'package:lc_web/Pages/onboarding.dart';
 // import 'package:lc_web/Pages/trial.dart';
 
@@ -37,14 +37,14 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
 
-      initialRoute: '/login',
+      initialRoute: '/home',
 
       routes: {
         '/login': (context) => const Login(),
         '/signup': (context) => const Signup(),
-        // '/home': (context) => const HomePage(),
+        '/home': (context) => const Home(),
         // '/settings': (context) => const Settings(),
-        // '/transition': (context) => const TransitionPage(),
+        '/transition': (context) => const TransitionPage(),
         '/onboarding': (context) => const Onboarding(),
         // '/welcome' : (context) => const WelcomePageOne(),
         // '/profile' : (context) => const Profile(),

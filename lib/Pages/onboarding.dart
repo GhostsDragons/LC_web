@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:lc_web/Pages/transition_page.dart';
 // import '../Functions/functions.dart';
 
 class Onboarding extends StatefulWidget {
@@ -40,12 +41,12 @@ class DesktopLayout extends StatefulWidget {
 }
 
 class _DesktopLayoutState extends State<DesktopLayout> {
-  String? name = "";
-  String? grade = "";
-  String? board = "";
+  String? name;
+  String? _grade;
+  String? _board;
 
-  List<String> boardOptions = ['CBSE', 'ICSE', 'IGCSE', 'SSC'];
-  List<String> gradeOptions = ['Grade 9', 'Grade 10', 'Grade 11', 'Grade 12'];
+  final List<String> boardOptions = ['CBSE', 'ICSE', 'IGCSE', 'SSC'];
+  final List<String> gradeOptions = ['Grade 9', 'Grade 10', 'Grade 11', 'Grade 12'];
 
   @override
   Widget build(BuildContext context) {
@@ -64,8 +65,9 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(10.0),
                   ),
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 20.0, vertical: 20.0),
+                  
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -76,14 +78,18 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
+
                       const SizedBox(height: 40.0),
+
                       RichText(
                         text: const TextSpan(children: [
                           TextSpan(text: 'Name'),
                         ]),
                         textAlign: TextAlign.left,
                       ),
+
                       const SizedBox(width: 20.0),
+
                       TextFormField(
                         initialValue: '',
                         decoration: InputDecoration(
@@ -94,7 +100,9 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                             borderSide: const BorderSide(color: Colors.grey),
                           ),
                         ),
+
                         onChanged: (value) => setState(() => name = value),
+
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter your name';
@@ -102,35 +110,41 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                           return null;
                         },
                       ),
+
+
                       const SizedBox(height: 10.0),
-                      DropdownButton<String>(
-                        value: grade,
-                        hint: const Text('Select Grade'),
-                        items: gradeOptions
-                            .map<DropdownMenuItem<String>>(
-                                (String value) => DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(value),
-                                    ))
-                            .toList(),
-                        onChanged: (value) => setState(() => grade = value!),
-                      ),
+
+                      Container(
+                          padding: const EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(8.0)),
+                          child: _gradeDropDown(underline: Container())),
+
                       const SizedBox(height: 10.0),
-                      DropdownButton<String>(
-                        value: board,
-                        hint: const Text('Select Board'),
-                        items: boardOptions
-                            .map<DropdownMenuItem<String>>(
-                                (String value) => DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(value),
-                                    ))
-                            .toList(),
-                        onChanged: (value) => setState(() => board = value!),
-                      ),
+
+                      Container(
+                          padding: const EdgeInsets.all(8.0),
+                          // width: 400,
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(8.0)),
+                          child: _boardDropDown(underline: Container())),
+
                       const SizedBox(height: 10.0),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const TransitionPage(
+                                  // name: _name,
+                                  // grade: _grade,
+                                  // board: _board,
+                                  ),
+                            ),
+                          );
+                        },
                         child: const Text('Submit'),
                       ),
                     ],
@@ -146,56 +160,75 @@ class _DesktopLayoutState extends State<DesktopLayout> {
 
           Expanded(
             flex: 1,
-            child: Center(
-              child: Container(
-                width: 350,
-                height: 500,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black),
-                ),
-                child: Column(
-                  children: [
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.account_circle_rounded,
-                          size: 200,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      'Hello there, $name',
-                      style: const TextStyle(
-                        fontSize: 40,
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          '$grade',
-                          style: const TextStyle(fontSize: 20),
-                        ),
-                        const Text(
-                          ' | ',
-                          style: TextStyle(fontSize: 25),
-                        ),
-                        Text('$board', style: const TextStyle(fontSize: 20)),
-                      ],
-                    )
-                  ],
-                ),
+            child: Container(
+              color: const Color(0xFF1F3E3C),
+              child: const Center(
+                child: Image(
+                  image: AssetImage('assets/onboarding_side.jpg')
+                )
               ),
-            ),
-          ),
+            )
+          )
         ],
       ),
     );
   }
+
+  Widget _gradeDropDown({
+    Widget? underline,
+    Widget? icon,
+    TextStyle? style,
+    TextStyle? hintStyle,
+    Color? dropdownColor,
+    Color? iconEnabledColor,
+  }) =>
+      DropdownButton<String>(
+          value: _grade,
+          underline: underline,
+          icon: icon,
+          dropdownColor: dropdownColor,
+          style: style,
+          iconEnabledColor: iconEnabledColor,
+          onChanged: (String? newValue) {
+            setState(() {
+              _grade = newValue;
+            });
+          },
+          hint: Text("Select your grade", style: hintStyle),
+          items: gradeOptions
+              .map((grade) =>
+                  DropdownMenuItem<String>(value: grade, child: Text(grade)))
+              .toList());
+
+  Widget _boardDropDown({
+    Widget? underline,
+    Widget? icon,
+    TextStyle? style,
+    TextStyle? hintStyle,
+    Color? dropdownColor,
+    Color? iconEnabledColor,
+  }) =>
+      DropdownButton<String>(
+          value: _board,
+          underline: underline,
+          icon: icon,
+          dropdownColor: dropdownColor,
+          style: style,
+          iconEnabledColor: iconEnabledColor,
+          onChanged: (String? newValue) {
+            setState(() {
+              _board = newValue;
+            });
+          },
+          hint: Center(
+            child: Text("Select your board",
+              style: hintStyle, 
+              ),
+          ),
+          items: boardOptions
+              .map((board) =>
+                  DropdownMenuItem<String>(value: board, child: Text(board)))
+              .toList());
 }
 
 class MobileLayout extends StatefulWidget {
@@ -212,3 +245,5 @@ class _MobileLayoutState extends State<MobileLayout> {
     return const Placeholder();
   }
 }
+
+
