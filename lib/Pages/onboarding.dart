@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:lc_web/Pages/transition_page.dart';
-=======
->>>>>>> 27cb4f4249790909c51c1a3b718c23e832f8ac93
 // import '../Functions/functions.dart';
 
 class Onboarding extends StatefulWidget {
@@ -158,7 +155,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
               color: const Color(0xFF1F3E3C),
               child: const Center(
                 child: Image(
-                  image: AssetImage('assets/onboarding_side.jpg')
+                  image: AssetImage('assets/onboarding_side.png')
                 )
               ),
             )
