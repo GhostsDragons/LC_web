@@ -20,26 +20,26 @@ class _LoginState extends State<Login> {
   bool loading = false;
   var email = "";
   var password = "";
-  final formkey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
   bool pwd = false;
   String? status;
 
   final emailController = TextEditingController();
-  final passwordcontroller = TextEditingController();
+  final passController = TextEditingController();
 
   void handleSubmit() async {
-    if (!formkey.currentState!.validate()) {
+    if (!formKey.currentState!.validate()) {
       return;
     }
-    password = passwordcontroller.value.text;
+    password = passController.value.text;
     if (password == "") {
       password = "2536";
     }
     email = emailController.value.text;
 
-    setState(() {
-      loading = true;
-    });
+    // setState(() {
+    //   loading = true;
+    // });
 
     status = await Auth().signInWithEmailAndPassword(email, password);
     if (status == "Sign-up") {
@@ -50,9 +50,9 @@ class _LoginState extends State<Login> {
       });
     }
 
-    setState(() {
-      loading = false;
-    });
+    // setState(() {
+    //   loading = false;
+    // });
   }
 
   @override
@@ -68,8 +68,8 @@ class _LoginState extends State<Login> {
                 return MobileLayout(
                   constraints: constraints,
                   emailController: emailController,
-                  passwordcontroller: passwordcontroller,
-                  formkey: formkey,
+                  passController: passController,
+                  formKey: formKey,
                   pwd: pwd,
                   handleSubmit: handleSubmit,
                 );
@@ -77,8 +77,8 @@ class _LoginState extends State<Login> {
                 return DesktopLayout(
                   constraints: constraints,
                   emailController: emailController,
-                  passwordcontroller: passwordcontroller,
-                  formkey: formkey,
+                  passController: passController,
+                  formKey: formKey,
                   pwd: pwd,
                   handleSubmit: handleSubmit,
                 );
@@ -95,8 +95,8 @@ class _LoginState extends State<Login> {
 
 class DesktopLayout extends StatefulWidget {
   final BoxConstraints constraints;
-  final TextEditingController emailController, passwordcontroller;
-  final GlobalKey<FormState> formkey;
+  final TextEditingController emailController, passController;
+  final GlobalKey<FormState> formKey;
   final bool pwd;
   final Function() handleSubmit;
 
@@ -104,8 +104,8 @@ class DesktopLayout extends StatefulWidget {
     super.key,
     required this.constraints,
     required this.emailController,
-    required this.passwordcontroller,
-    required this.formkey,
+    required this.passController,
+    required this.formKey,
     required this.pwd,
     required this.handleSubmit,
   });
@@ -122,19 +122,23 @@ class _DesktopLayoutState extends State<DesktopLayout> {
         children: [
           // Container For Background Image
           Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/BG.jpg'),
-                fit: BoxFit.cover,
-                opacity: .2,
-              ),
-              gradient: LinearGradient(
-                colors: [Color(0xffffffff), Color(0xff1f3e3c)],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-            ),
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/BG.jpg'),
+            fit: BoxFit.cover,
           ),
+        ),
+      ),
+
+      Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xddffffff), Color(0xdd1f3e3c)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+      ),
 
           Row(
             children: [
@@ -247,7 +251,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                     const EdgeInsets.symmetric(vertical: 100, horizontal: 50),
                 child: SingleChildScrollView(
                   child: Form(
-                    key: widget.formkey,
+                    key: widget.formKey,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -283,7 +287,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                         Visibility(
                           visible: widget.pwd,
                           child: FormInput(
-                            textController: widget.passwordcontroller,
+                            textController: widget.passController,
                             keyboardType: TextInputType.visiblePassword,
                             label: 'Password',
                             hint: 'Enter your password',
@@ -305,11 +309,11 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                             ),
                           ),
                           onPressed: () => widget.handleSubmit(),
-                          child: const Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.all(8.0),
+                          child: const Center(
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: FittedBox(
+                                fit: BoxFit.contain,
                                 child: Text(
                                   'Sign up with Email',
                                   style: TextStyle(
@@ -317,7 +321,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                                   ),
                                 ),
                               ),
-                            ],
+                            ),
                           ),
                         ),
 
@@ -350,7 +354,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                                     image: AssetImage('assets/R.png'),
                                     height: 15),
                                 SizedBox(
-                                  width: 10,
+                                  width: 5,
                                 ),
                                 Text(
                                   'Google',
@@ -433,8 +437,8 @@ class _DesktopLayoutState extends State<DesktopLayout> {
 
 class MobileLayout extends StatefulWidget {
   final BoxConstraints constraints;
-  final TextEditingController emailController, passwordcontroller;
-  final GlobalKey<FormState> formkey;
+  final TextEditingController emailController, passController;
+  final GlobalKey<FormState> formKey;
   final bool pwd;
   final Function() handleSubmit;
 
@@ -442,8 +446,8 @@ class MobileLayout extends StatefulWidget {
     super.key,
     required this.constraints,
     required this.emailController,
-    required this.passwordcontroller,
-    required this.formkey,
+    required this.passController,
+    required this.formKey,
     required this.pwd,
     required this.handleSubmit,
   });
@@ -463,10 +467,14 @@ class _MobileLayoutState extends State<MobileLayout> {
           image: DecorationImage(
             image: AssetImage('assets/BG.jpg'),
             fit: BoxFit.cover,
-            opacity: .2,
           ),
+        ),
+      ),
+
+      Container(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xffffffff), Color(0xff1f3e3c)],
+            colors: [Color(0xddffffff), Color(0xdd1f3e3c)],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -533,7 +541,7 @@ class _MobileLayoutState extends State<MobileLayout> {
                 margin:
                     const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
                 child: Form(
-                  key: widget.formkey,
+                  key: widget.formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -569,7 +577,7 @@ class _MobileLayoutState extends State<MobileLayout> {
                       Visibility(
                         visible: widget.pwd,
                         child: FormInput(
-                          textController: widget.passwordcontroller,
+                          textController: widget.passController,
                           keyboardType: TextInputType.visiblePassword,
                           label: 'Password',
                           hint: 'Enter password',

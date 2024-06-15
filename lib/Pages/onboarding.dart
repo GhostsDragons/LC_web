@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:lc_web/Pages/transition_page.dart';
+=======
+>>>>>>> 27cb4f4249790909c51c1a3b718c23e832f8ac93
 // import '../Functions/functions.dart';
 
 class Onboarding extends StatefulWidget {
@@ -13,22 +16,13 @@ class Onboarding extends StatefulWidget {
 class _OnboardingState extends State<Onboarding> {
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return const Text('Hi');
-        } else {
-          return LayoutBuilder(builder: (context, constraints) {
-            if (constraints.maxWidth < 600) {
-              return MobileLayout(constraints: constraints);
-            } else {
-              return DesktopLayout(constraints: constraints);
-            }
-          });
-        }
-      },
-    );
+    return LayoutBuilder(builder: (context, constraints) {
+      if (constraints.maxWidth < 600) {
+        return MobileLayout(constraints: constraints);
+      } else {
+        return DesktopLayout(constraints: constraints);
+      }
+    });
   }
 }
 
