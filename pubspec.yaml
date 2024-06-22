@@ -40,8 +40,13 @@ dependencies:
   fluttertoast: ^8.2.5
   carousel_slider: ^4.2.1
   url_launcher: ^6.2.6
+<<<<<<< HEAD
   collapsible_sidebar: ^2.0.7
   lottie: ^3.1.2
+=======
+  image_input: ^0.0.5
+  google_fonts: ^6.2.1
+>>>>>>> 08de20becf8e7086a9b50aeb7e57f38dc81d937e
 
 dev_dependencies:
   flutter_test:
@@ -68,6 +73,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/
+    - assets/onboarding/
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
@@ -82,29 +88,29 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  fonts:
-    - family: Unbounded
-      fonts:
-        - asset: fonts/Unbounded-Regular.ttf
-          style: italic
-        - asset: fonts/Unbounded-ExtraBold.ttf
-          weight: 800
-        - asset: fonts/Unbounded-Bold.ttf
-          weight: 300
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-    - family: Archivo
-      fonts:
-        - asset: fonts/Archivo-Regular.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
-    - family: Inter
-      fonts:
-        - asset: fonts/Inter-Regular.ttf
-        - asset: fonts/Inter-Medium.ttf
-          weight: 200
-        - asset: fonts/Inter-Bold.ttf
-          weight: 500
+#  fonts:
+#    - family: Unbounded
+#      fonts:
+#        - asset: fonts/Unbounded-Regular.ttf
+#          style: italic
+#        - asset: fonts/Unbounded-ExtraBold.ttf
+#          weight: 800
+#        - asset: fonts/Unbounded-Bold.ttf
+#          weight: 300
+#  #       - asset: fonts/Schyler-Italic.ttf
+#  #         style: italic
+#    - family: Archivo
+#      fonts:
+#        - asset: fonts/Archivo-Regular.ttf
+#  #       - asset: fonts/TrajanPro_Bold.ttf
+#  #         weight: 700
+#    - family: Inter
+#      fonts:
+#        - asset: fonts/Inter-Regular.ttf
+#        - asset: fonts/Inter-Medium.ttf
+#          weight: 200
+#        - asset: fonts/Inter-Bold.ttf
+#          weight: 500
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
