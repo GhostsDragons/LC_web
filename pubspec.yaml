@@ -40,6 +40,8 @@ dependencies:
   fluttertoast: ^8.2.5
   carousel_slider: ^4.2.1
   url_launcher: ^6.2.6
+  collapsible_sidebar: ^2.0.7
+  lottie: ^3.1.2
 
 dev_dependencies:
   flutter_test:

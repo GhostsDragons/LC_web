@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:lc_web/Pages/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:lottie/lottie.dart';
 
 class TransitionPage extends StatefulWidget {
   const TransitionPage({super.key});
@@ -67,49 +68,15 @@ class _DesktopLayoutState extends State<DesktopLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor:const Color(0xFF1F3E3C),
-      ),
-
-      body: const Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.account_circle_rounded,
-            size: 200,
+      body: Center(
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height * 0.4,
+          width: MediaQuery.of(context).size.width * 0.4,
+          child: Lottie.network(
+            'https://lottie.host/cd71aca9-d707-466c-92e3-2c78f9995160/BvfvtJ3M7o.json',
+            fit: BoxFit.contain
           ),
-      
-          Text(
-            'Welcome name',
-            style: TextStyle(
-              fontSize: 50,
-              fontWeight: FontWeight.bold
-            ),
-          ),
-      
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Grade',
-                style: TextStyle(
-                  fontSize: 50,
-                  fontWeight: FontWeight.bold
-                ),
-              ),
-          
-              Text(' | '),
-          
-              Text(
-                'Board',
-                style: TextStyle(
-                  fontSize: 50,
-                  fontWeight: FontWeight.bold
-                ),
-              ),
-            ],
-          )
-        ],
+        ),
       ),
     );
   }
