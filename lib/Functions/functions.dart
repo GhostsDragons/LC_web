@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Reviews extends StatelessWidget {
   const Reviews({
@@ -36,11 +37,12 @@ class Reviews extends StatelessWidget {
                   ),
                   Text(
                     name,
-                    style: const TextStyle(
-                        fontFamily: 'Unbounded',
-                        fontSize: 30,
-                        fontWeight: FontWeight.w300,
-                        color: Color(0xcc1F3E3C)),
+                    style: GoogleFonts.unbounded(
+                      textStyle: const TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.w300,
+                          color: Color(0xcc1F3E3C)),
+                    ),
                   ),
                 ],
               ),
@@ -53,10 +55,11 @@ class Reviews extends StatelessWidget {
             Flexible(
                 child: Text(
               rev,
-              style: const TextStyle(
-                fontFamily: 'Archivo',
-                fontSize: 15,
-                color: Color(0xff1F3E3C),
+              style: GoogleFonts.archivo(
+                textStyle: const TextStyle(
+                  fontSize: 15,
+                  color: Color(0xff1F3E3C),
+                ),
               ),
             )),
           ],
@@ -71,14 +74,14 @@ class FormInput extends StatelessWidget {
       {super.key,
       required this.textController,
       required this.keyboardType,
-      required this.label,
+      this.label,
       required this.hint,
       this.obsTxt = false,
       this.vis = true});
 
   final TextEditingController textController;
   final TextInputType keyboardType;
-  final String label, hint;
+  final String? label, hint;
   final bool obsTxt, vis;
 
   @override
@@ -89,17 +92,19 @@ class FormInput extends StatelessWidget {
       obscureText: obsTxt,
       decoration: InputDecoration(
         labelText: label,
-        labelStyle: TextStyle(
-            fontFamily: 'Inter',
-            color: Colors.grey[700],
-            fontSize: 20,
-            fontWeight: FontWeight.w500),
+        labelStyle: GoogleFonts.inter(
+          textStyle: TextStyle(
+              color: Colors.grey[700],
+              fontSize: 15,
+              fontWeight: FontWeight.w500),
+        ),
         hintText: hint,
-        hintStyle: TextStyle(
-            fontFamily: 'Inter',
-            color: Colors.grey[700],
-            fontSize: 20,
-            fontWeight: FontWeight.w500),
+        hintStyle: GoogleFonts.inter(
+          textStyle: TextStyle(
+              color: Colors.grey[700],
+              fontSize: 15,
+              fontWeight: FontWeight.w500),
+        ),
         filled: true,
         fillColor: Colors.white,
         contentPadding: const EdgeInsets.all(15),
