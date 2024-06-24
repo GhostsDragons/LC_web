@@ -28,7 +28,7 @@ class CollapsibleSidebar extends StatefulWidget {
     this.toggleTitle = 'Collapse',
     this.avatarImg,
     this.height = double.infinity,
-    this.minWidth = 80,
+    this.minWidth = 53,
     this.maxWidth = 270,
     this.borderRadius = 15,
     this.iconSize = 40,

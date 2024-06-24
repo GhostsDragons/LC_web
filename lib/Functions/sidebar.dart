@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lc_web/Firebase/firebase_auth.dart';
 import 'collapsible_sidebar.dart';
 import 'package:lc_web/Pages/profile.dart';
 
@@ -75,7 +76,7 @@ class _SidebarState extends State<Sidebar> {
      CollapsibleItem(
       text: 'Logout',
       icon: Icons.edit,
-      onPressed: (){},
+      onPressed: () => Auth().signOut(),
      ),
     ];
   }
@@ -86,7 +87,7 @@ class _SidebarState extends State<Sidebar> {
     return SafeArea(
       child: CollapsibleSidebar(
         collapseOnBodyTap: true,
-        showToggleButton: false,
+        showToggleButton: true,
         avatarImg: _avatarImg,
 
         isCollapsed: MediaQuery.of(context).size.width <= 800,

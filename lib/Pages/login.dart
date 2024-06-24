@@ -48,6 +48,11 @@ class _LoginState extends State<Login> {
     // });
   }
 
+  updatePwd(){
+    setState(() {
+      pwd = !pwd;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
@@ -59,6 +64,7 @@ class _LoginState extends State<Login> {
           formKey: formKey,
           pwd: pwd,
           handleSubmit: handleSubmit,
+          updatePwd: updatePwd,
         );
       } else {
         return DesktopLayout(
@@ -68,6 +74,7 @@ class _LoginState extends State<Login> {
           formKey: formKey,
           pwd: pwd,
           handleSubmit: handleSubmit,
+          updatePwd: updatePwd,
         );
       }
     });
@@ -83,10 +90,11 @@ class DesktopLayout extends StatefulWidget {
   final BoxConstraints constraints;
   final TextEditingController emailController, passController;
   final GlobalKey<FormState> formKey;
-  bool pwd;
+  final bool pwd;
   final Function() handleSubmit;
+  final Function() updatePwd;
 
-  DesktopLayout({
+  const DesktopLayout({
     super.key,
     required this.constraints,
     required this.emailController,
@@ -94,6 +102,7 @@ class DesktopLayout extends StatefulWidget {
     required this.formKey,
     required this.pwd,
     required this.handleSubmit,
+    required this.updatePwd,
   });
 
   @override
@@ -309,11 +318,9 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                             if (!widget.pwd) {
                               if (await Auth().isEmailRegistered(
                                   widget.emailController.text)) {
-                                setState(() {
-                                  widget.pwd = true;
-                                });
+                                widget.updatePwd();
                               } else {
-                                Navigator.pushReplacement(
+                                Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => const Signup()));
@@ -342,47 +349,47 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                           height: 15,
                         ),
 
-                        const Text('or continue with'),
-                        const SizedBox(height: 15),
+                        // const Text('or continue with'),
+                        // const SizedBox(height: 15),
 
                         // Google
-                        FilledButton(
-                          style: ButtonStyle(
-                            backgroundColor: WidgetStateProperty.all<Color>(
-                                const Color(0xffeeeeee)),
-                            shape:
-                                WidgetStateProperty.all<RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                            ),
-                          ),
-                          onPressed: () {},
-                          child: Container(
-                            padding: const EdgeInsets.all(10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Image(
-                                    image: AssetImage('assets/google_logo.png'),
-                                    height: 15),
-                                const SizedBox(
-                                  width: 5,
-                                ),
-                                Text(
-                                  'Google',
-                                  style: GoogleFonts.archivo(
-                                    textStyle: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                        // FilledButton(
+                        //   style: ButtonStyle(
+                        //     backgroundColor: WidgetStateProperty.all<Color>(
+                        //         const Color(0xffeeeeee)),
+                        //     shape:
+                        //         WidgetStateProperty.all<RoundedRectangleBorder>(
+                        //       RoundedRectangleBorder(
+                        //         borderRadius: BorderRadius.circular(5),
+                        //       ),
+                        //     ),
+                        //   ),
+                        //   onPressed: () {},
+                        //   child: Container(
+                        //     padding: const EdgeInsets.all(10),
+                        //     child: Row(
+                        //       mainAxisAlignment: MainAxisAlignment.center,
+                        //       children: [
+                        //         const Image(
+                        //             image: AssetImage('assets/google_logo.png'),
+                        //             height: 15),
+                        //         const SizedBox(
+                        //           width: 5,
+                        //         ),
+                        //         Text(
+                        //           'Google',
+                        //           style: GoogleFonts.archivo(
+                        //             textStyle: const TextStyle(
+                        //               color: Colors.black,
+                        //               fontSize: 15,
+                        //               fontWeight: FontWeight.w700,
+                        //             ),
+                        //           ),
+                        //         ),
+                        //       ],
+                        //     ),
+                        //   ),
+                        // ),
 
                         const SizedBox(
                           height: 15,
@@ -455,6 +462,7 @@ class MobileLayout extends StatefulWidget {
   final GlobalKey<FormState> formKey;
   final bool pwd;
   final Function() handleSubmit;
+  final Function() updatePwd;
 
   const MobileLayout({
     super.key,
@@ -464,6 +472,7 @@ class MobileLayout extends StatefulWidget {
     required this.formKey,
     required this.pwd,
     required this.handleSubmit,
+    required this.updatePwd,
   });
 
   @override
@@ -615,7 +624,21 @@ class _MobileLayoutState extends State<MobileLayout> {
                             borderRadius: BorderRadius.circular(5),
                           ),
                         ),
-                        onPressed: () => widget.handleSubmit(),
+                        onPressed: () async {
+                          if (!widget.pwd) {
+                            if (await Auth().isEmailRegistered(
+                                widget.emailController.text)) {
+                              widget.updatePwd();
+                            } else {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const Signup()));
+                            }
+                          } else {
+                            widget.handleSubmit();
+                          }
+                        },
                         child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -636,47 +659,47 @@ class _MobileLayoutState extends State<MobileLayout> {
                         height: 15,
                       ),
 
-                      const Text('or continue with'),
-                      const SizedBox(height: 15),
+                      // const Text('or continue with'),
+                      // const SizedBox(height: 15),
 
                       // Google
-                      FilledButton(
-                        style: ButtonStyle(
-                          backgroundColor: WidgetStateProperty.all<Color>(
-                              const Color(0xffeeeeee)),
-                          shape:
-                              WidgetStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                          ),
-                        ),
-                        onPressed: () {},
-                        child: Container(
-                          padding: const EdgeInsets.all(10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Image(
-                                  image: AssetImage('assets/google_logo.png'),
-                                  height: 15),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                'Google',
-                                style: GoogleFonts.archivo(
-                                  textStyle: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                      // FilledButton(
+                      //   style: ButtonStyle(
+                      //     backgroundColor: WidgetStateProperty.all<Color>(
+                      //         const Color(0xffeeeeee)),
+                      //     shape:
+                      //         WidgetStateProperty.all<RoundedRectangleBorder>(
+                      //       RoundedRectangleBorder(
+                      //         borderRadius: BorderRadius.circular(5),
+                      //       ),
+                      //     ),
+                      //   ),
+                      //   onPressed: () {},
+                      //   child: Container(
+                      //     padding: const EdgeInsets.all(10),
+                      //     child: Row(
+                      //       mainAxisAlignment: MainAxisAlignment.center,
+                      //       children: [
+                      //         const Image(
+                      //             image: AssetImage('assets/google_logo.png'),
+                      //             height: 15),
+                      //         const SizedBox(
+                      //           width: 10,
+                      //         ),
+                      //         Text(
+                      //           'Google',
+                      //           style: GoogleFonts.archivo(
+                      //             textStyle: const TextStyle(
+                      //               color: Colors.black,
+                      //               fontSize: 15,
+                      //               fontWeight: FontWeight.w700,
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       ],
+                      //     ),
+                      //   ),
+                      // ),
 
                       const SizedBox(
                         height: 15,

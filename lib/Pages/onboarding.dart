@@ -1,8 +1,8 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lc_web/Functions/functions.dart';
 import 'package:lc_web/Pages/transition_page.dart';
+import 'package:lottie/lottie.dart';
 
 class Onboarding extends StatefulWidget {
   const Onboarding({super.key});
@@ -161,43 +161,21 @@ class _DesktopLayoutState extends State<DesktopLayout> {
 
           Expanded(
             flex: 1,
-            child:
-            CarouselSlider(
-              options: CarouselOptions(
-                // height: 500,
-                // aspectRatio: 16/9,
-                viewportFraction: 1,
-                autoPlay: true,
-                autoPlayInterval: const Duration(seconds: 3),
-                autoPlayAnimationDuration:
-                const Duration(milliseconds: 800),
-                autoPlayCurve: Curves.fastOutSlowIn,
-                enlargeCenterPage: true,
-                enlargeFactor: 0.5,
-                scrollDirection: Axis.horizontal,
+            child: Container(
+              decoration: const BoxDecoration(
+                color: Colors.white,
               ),
-              items: <Widget>[
-
-                Image.asset('assets/onboarding/Onboarding1.png'),
-
-                Image.asset('assets/onboarding/Onboarding2.png'),
-
-                Image.asset('assets/onboarding/Onboarding3.png')
-
-
-              ],
-            )
-            // Container(
-            //   child: const Center(
-            //     child: Image(
-            //       image: AssetImage('assets/Onboarding1.png',
-            //       ),
-            //       // height: ,
-            //
-            //
-            //     ),
-            //   ),
-            // ),
+              child: Center(
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.5,
+                  width: MediaQuery.of(context).size.width * 0.5,
+                  child: Lottie.network(
+                      'https://lottie.host/75cc02d9-7347-4f47-8814-32d027651e77/M8HI0ZNtCO.json',
+                      fit: BoxFit.contain
+                  ),
+                ),
+              ),
+            ),
           ),
         ],
       ),
