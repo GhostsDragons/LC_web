@@ -14,8 +14,8 @@ import 'package:flutter/material.dart';
 export 'package:collapsible_sidebar/collapsible_sidebar/collapsible_item.dart';
 
 class CollapsibleSidebar extends StatefulWidget {
-  CollapsibleSidebar({
-    Key? key,
+  const CollapsibleSidebar({
+    super.key,
     required this.items,
     required this.body,
     this.title = 'Lorem Ipsum',
@@ -75,7 +75,7 @@ class CollapsibleSidebar extends StatefulWidget {
         offset: Offset(3, 3),
       ),
     ],
-  }) : super(key: key);
+  });
 
   final avatarImg;
   final String title, toggleTitle;
@@ -217,9 +217,9 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
       } else {
         _currWidth -= details.primaryDelta!;
       }
-      if (_currWidth > tempWidth)
+      if (_currWidth > tempWidth) {
         _currWidth = tempWidth;
-      else if (_currWidth < widget.minWidth)
+      } else if (_currWidth < widget.minWidth)
         _currWidth = widget.minWidth;
       else
         setState(() {});
@@ -227,9 +227,9 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
   }
 
   void _onHorizontalDragEnd(DragEndDetails _) {
-    if (_currWidth == tempWidth)
+    if (_currWidth == tempWidth) {
       setState(() => _isCollapsed = false);
-    else if (_currWidth == widget.minWidth)
+    } else if (_currWidth == widget.minWidth)
       setState(() => _isCollapsed = true);
     else {
       var threshold = _isCollapsed ? _delta1By4 : _delta3by4;
@@ -263,7 +263,7 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
               ),
               Expanded(
                 child: SingleChildScrollView(
-                  physics: BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   reverse: widget.fitItemsToBottom,
                   child: Stack(
                     children: [

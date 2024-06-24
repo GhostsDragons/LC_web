@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:lc_web/Pages/home.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:lottie/lottie.dart';
 
 class TransitionPage extends StatefulWidget {
@@ -17,7 +16,6 @@ class _TransitionPageState extends State<TransitionPage> {
   // final String board;
 
   // _TransitionPageState(this.grade, this.board, this.name);
-
 
   @override
   void initState() {
@@ -35,21 +33,12 @@ class _TransitionPageState extends State<TransitionPage> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return const Text('Hi');
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth < 600) {
+          return MobileLayout(constraints: constraints);
         } else {
-          return LayoutBuilder(
-            builder: (context, constraints) {
-              if (constraints.maxWidth < 600) {
-                return MobileLayout(constraints: constraints);
-              } else {
-                return DesktopLayout(constraints: constraints);
-              }
-            },
-          );
+          return DesktopLayout(constraints: constraints);
         }
       },
     );
@@ -81,7 +70,6 @@ class _DesktopLayoutState extends State<DesktopLayout> {
     );
   }
 }
-
 
 class MobileLayout extends StatefulWidget {
   final BoxConstraints constraints;

@@ -524,19 +524,14 @@ class _MobileLayoutState extends State<MobileLayout> {
                               ),
                             ),
                             onPressed: () => widget.handleSubmit(),
-                            child: const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text(
-                                    'Sign up with Email',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                    ),
-                                  ),
+                            child: const Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(
+                                'Sign up with Email',
+                                style: TextStyle(
+                                  color: Colors.white,
                                 ),
-                              ],
+                              ),
                             ),
                           ),
 
