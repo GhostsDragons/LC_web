@@ -1,7 +1,10 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lc_web/Firebase/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:lc_web/Pages/signup.dart';
+
 import '../Functions/functions.dart';
 
 // TODO: Signup with google
@@ -22,33 +25,23 @@ class _LoginState extends State<Login> {
   var password = "";
   final formKey = GlobalKey<FormState>();
   bool pwd = false;
-  String? status;
+  User? user;
 
   final emailController = TextEditingController();
   final passController = TextEditingController();
 
-  void handleSubmit() async {
+  Future<void> handleSubmit() async {
     if (!formKey.currentState!.validate()) {
       return;
     }
     password = passController.value.text;
-    if (password == "") {
-      password = "2536";
-    }
     email = emailController.value.text;
 
     // setState(() {
     //   loading = true;
     // });
 
-    status = await Auth().signInWithEmailAndPassword(email, password);
-    if (status == "Sign-up") {
-      Navigator.pushNamed(context, '/signup');
-    } else if (status == "pwd") {
-      setState(() {
-        pwd = true;
-      });
-    }
+    await Auth().signInWithEmailAndPassword(email, password);
 
     // setState(() {
     //   loading = false;
@@ -57,35 +50,27 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return const Text("Hi");
-          } else {
-            return LayoutBuilder(builder: (context, constraints) {
-              if (constraints.maxWidth < 600) {
-                return MobileLayout(
-                  constraints: constraints,
-                  emailController: emailController,
-                  passController: passController,
-                  formKey: formKey,
-                  pwd: pwd,
-                  handleSubmit: handleSubmit,
-                );
-              } else {
-                return DesktopLayout(
-                  constraints: constraints,
-                  emailController: emailController,
-                  passController: passController,
-                  formKey: formKey,
-                  pwd: pwd,
-                  handleSubmit: handleSubmit,
-                );
-              }
-            });
-          }
-        });
+    return LayoutBuilder(builder: (context, constraints) {
+      if (constraints.maxWidth < 600) {
+        return MobileLayout(
+          constraints: constraints,
+          emailController: emailController,
+          passController: passController,
+          formKey: formKey,
+          pwd: pwd,
+          handleSubmit: handleSubmit,
+        );
+      } else {
+        return DesktopLayout(
+          constraints: constraints,
+          emailController: emailController,
+          passController: passController,
+          formKey: formKey,
+          pwd: pwd,
+          handleSubmit: handleSubmit,
+        );
+      }
+    });
   }
 }
 
@@ -93,14 +78,15 @@ class _LoginState extends State<Login> {
 // Desktop Layout
 // ---------------------------------------------------------------------------------------
 
+
 class DesktopLayout extends StatefulWidget {
   final BoxConstraints constraints;
   final TextEditingController emailController, passController;
   final GlobalKey<FormState> formKey;
-  final bool pwd;
+  bool pwd;
   final Function() handleSubmit;
 
-  const DesktopLayout({
+  DesktopLayout({
     super.key,
     required this.constraints,
     required this.emailController,
@@ -115,6 +101,12 @@ class DesktopLayout extends StatefulWidget {
 }
 
 class _DesktopLayoutState extends State<DesktopLayout> {
+  // signIn() async {
+  //   await Auth().signInWithGoogle();
+  //   Navigator.pushReplacement(
+  //       context, MaterialPageRoute(builder: (context) => const Home()));
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -122,23 +114,23 @@ class _DesktopLayoutState extends State<DesktopLayout> {
         children: [
           // Container For Background Image
           Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/BG.jpg'),
-            fit: BoxFit.cover,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/BG.jpg'),
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
-        ),
-      ),
 
-      Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xddffffff), Color(0xdd1f3e3c)],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
+          Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color(0xddffffff), Color(0xdd1f3e3c)],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+            ),
           ),
-        ),
-      ),
 
           Row(
             children: [
@@ -152,15 +144,17 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                     // Learners' Club
                     SizedBox(
                       width: widget.constraints.maxWidth / 3,
-                      child: const FittedBox(
+                      child: FittedBox(
                         fit: BoxFit.contain,
                         child: Text(
                           'Learners’ \nClub',
-                          style: TextStyle(
-                              fontFamily: 'Unbounded',
-                              fontWeight: FontWeight.w800,
-                              fontSize: 70,
-                              color: Color(0xff1F3E3C)),
+                          style: GoogleFonts.unbounded(
+                            textStyle: const TextStyle(
+                                fontFamily: 'Unbounded',
+                                fontWeight: FontWeight.w800,
+                                fontSize: 70,
+                                color: Color(0xff1F3E3C)),
+                          ),
                         ),
                       ),
                     ),
@@ -174,15 +168,17 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                       width: widget.constraints.maxWidth / 3,
                       padding: EdgeInsets.fromLTRB(
                           0, 5, widget.constraints.maxWidth * .1, 5),
-                      child: const FittedBox(
+                      child: FittedBox(
                         fit: BoxFit.contain,
                         child: Text(
                           'Learning Unbounded',
-                          style: TextStyle(
-                              fontFamily: 'Unbounded',
-                              fontSize: 30,
-                              fontStyle: FontStyle.italic,
-                              color: Color(0x991F3E3C)),
+                          style: GoogleFonts.unbounded(
+                            textStyle: const TextStyle(
+                                fontFamily: 'Unbounded',
+                                fontSize: 30,
+                                fontStyle: FontStyle.italic,
+                                color: Color(0x991F3E3C)),
+                          ),
                         ),
                       ),
                     ),
@@ -256,14 +252,15 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         // Login
-                        const Text(
+                        Text(
                           "Login",
-                          style: TextStyle(
-                            fontSize: 40,
-                            fontFamily: 'Unbounded',
-                            color: Color(0xff1F3E3C),
-                            fontWeight: FontWeight.bold,
-                            // fontFamily:
+                          style: GoogleFonts.unbounded(
+                            textStyle: const TextStyle(
+                              fontSize: 40,
+                              color: Color(0xff1F3E3C),
+                              fontWeight: FontWeight.bold,
+                              // fontFamily:
+                            ),
                           ),
                         ),
 
@@ -308,7 +305,23 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                               borderRadius: BorderRadius.circular(5),
                             ),
                           ),
-                          onPressed: () => widget.handleSubmit(),
+                          onPressed: () async {
+                            if (!widget.pwd) {
+                              if (await Auth().isEmailRegistered(
+                                  widget.emailController.text)) {
+                                setState(() {
+                                  widget.pwd = true;
+                                });
+                              } else {
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => const Signup()));
+                              }
+                            } else {
+                              widget.handleSubmit();
+                            }
+                          },
                           child: const Center(
                             child: Padding(
                               padding: EdgeInsets.all(8.0),
@@ -347,22 +360,23 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                           onPressed: () {},
                           child: Container(
                             padding: const EdgeInsets.all(10),
-                            child: const Row(
+                            child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Image(
-                                    image: AssetImage('assets/R.png'),
+                                const Image(
+                                    image: AssetImage('assets/google_logo.png'),
                                     height: 15),
-                                SizedBox(
+                                const SizedBox(
                                   width: 5,
                                 ),
                                 Text(
                                   'Google',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 15,
-                                    fontFamily: "Archivo",
-                                    fontWeight: FontWeight.w700,
+                                  style: GoogleFonts.archivo(
+                                    textStyle: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w700,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -491,16 +505,17 @@ class _MobileLayoutState extends State<MobileLayout> {
               // Learners' Club
               SizedBox(
                 width: widget.constraints.maxWidth / 1.5,
-                child: const FittedBox(
+                child: FittedBox(
                   fit: BoxFit.contain,
                   child: Text(
                     'Learners’ \nClub',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontFamily: 'Unbounded',
-                        fontWeight: FontWeight.w800,
-                        fontSize: 70,
-                        color: Color(0xff1F3E3C)),
+                    style: GoogleFonts.unbounded(
+                      textStyle: const TextStyle(
+                          fontWeight: FontWeight.w800,
+                          fontSize: 70,
+                          color: Color(0xff1F3E3C)),
+                    ),
                   ),
                 ),
               ),
@@ -512,15 +527,16 @@ class _MobileLayoutState extends State<MobileLayout> {
               // Learning Unbounded
               SizedBox(
                 width: widget.constraints.maxWidth / 2,
-                child: const FittedBox(
+                child: FittedBox(
                   fit: BoxFit.contain,
                   child: Text(
                     'Learning Unbounded',
-                    style: TextStyle(
-                        fontFamily: 'Unbounded',
-                        fontSize: 30,
-                        fontStyle: FontStyle.italic,
-                        color: Color(0x991F3E3C)),
+                    style: GoogleFonts.unbounded(
+                      textStyle: const TextStyle(
+                          fontSize: 30,
+                          fontStyle: FontStyle.italic,
+                          color: Color(0x991F3E3C)),
+                    ),
                   ),
                 ),
               ),
@@ -546,14 +562,15 @@ class _MobileLayoutState extends State<MobileLayout> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       // Login
-                      const Text(
+                      Text(
                         "Login",
-                        style: TextStyle(
-                          fontSize: 40,
-                          fontFamily: 'Unbounded',
-                          color: Color(0xff1F3E3C),
-                          fontWeight: FontWeight.bold,
-                          // fontFamily:
+                        style: GoogleFonts.unbounded(
+                          textStyle: const TextStyle(
+                            fontSize: 40,
+                            color: Color(0xff1F3E3C),
+                            fontWeight: FontWeight.bold,
+                            // fontFamily:
+                          ),
                         ),
                       ),
 
@@ -637,22 +654,23 @@ class _MobileLayoutState extends State<MobileLayout> {
                         onPressed: () {},
                         child: Container(
                           padding: const EdgeInsets.all(10),
-                          child: const Row(
+                          child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Image(
-                                  image: AssetImage('assets/R.png'),
+                              const Image(
+                                  image: AssetImage('assets/google_logo.png'),
                                   height: 15),
-                              SizedBox(
+                              const SizedBox(
                                 width: 10,
                               ),
                               Text(
                                 'Google',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 15,
-                                  fontFamily: "Archivo",
-                                  fontWeight: FontWeight.w700,
+                                style: GoogleFonts.archivo(
+                                  textStyle: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w700,
+                                  ),
                                 ),
                               ),
                             ],
