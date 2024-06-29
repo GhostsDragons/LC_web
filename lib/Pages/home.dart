@@ -1,7 +1,7 @@
 // ignore_for_file: unused_import
 
 import 'package:flutter/material.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_auth/_auth.dart';
 import 'package:lc_web/Functions/sidebar.dart';
 import 'package:collapsible_sidebar/collapsible_sidebar.dart';
 
@@ -16,7 +16,7 @@ Widget build(BuildContext context) {
 	debugShowCheckedModeBanner: false,
 	title: 'Collapse Sidebar',
 	home: Scaffold(
-		body: Sidebar(),
+		body: Sidebar(body: Center(child: Text("Home"),),),
 	),
 	);
 }

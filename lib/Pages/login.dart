@@ -1,11 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:lc_web/Firebase/firebase_auth.dart';
+import 'package:lc_web/Firebase/_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:lc_web/Pages/home.dart';
 import 'package:lc_web/Pages/signup.dart';
-
-import '../Functions/functions.dart';
+import 'package:lc_web/Functions/functions.dart';
 
 // TODO: Signup with google
 // TODO: Link to terms and Services and Privacy Policy
@@ -37,22 +37,23 @@ class _LoginState extends State<Login> {
     password = passController.value.text;
     email = emailController.value.text;
 
-    // setState(() {
-    //   loading = true;
-    // });
+    setState(() {
+      loading = true;
+    });
 
     await Auth().signInWithEmailAndPassword(email, password);
 
-    // setState(() {
-    //   loading = false;
-    // });
+    setState(() {
+      loading = false;
+    });
   }
 
-  updatePwd(){
+  updatePwd() {
     setState(() {
       pwd = !pwd;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
@@ -65,6 +66,7 @@ class _LoginState extends State<Login> {
           pwd: pwd,
           handleSubmit: handleSubmit,
           updatePwd: updatePwd,
+          loading: loading,
         );
       } else {
         return DesktopLayout(
@@ -75,6 +77,7 @@ class _LoginState extends State<Login> {
           pwd: pwd,
           handleSubmit: handleSubmit,
           updatePwd: updatePwd,
+          loading: loading,
         );
       }
     });
@@ -85,12 +88,11 @@ class _LoginState extends State<Login> {
 // Desktop Layout
 // ---------------------------------------------------------------------------------------
 
-
 class DesktopLayout extends StatefulWidget {
   final BoxConstraints constraints;
   final TextEditingController emailController, passController;
   final GlobalKey<FormState> formKey;
-  final bool pwd;
+  final bool pwd, loading;
   final Function() handleSubmit;
   final Function() updatePwd;
 
@@ -103,6 +105,7 @@ class DesktopLayout extends StatefulWidget {
     required this.pwd,
     required this.handleSubmit,
     required this.updatePwd,
+    required this.loading,
   });
 
   @override
@@ -320,25 +323,34 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                                   widget.emailController.text)) {
                                 widget.updatePwd();
                               } else {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => const Signup()));
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => const Signup()));
                               }
                             } else {
                               widget.handleSubmit();
                             }
                           },
-                          child: const Center(
+                          child: widget.loading
+                              ? const Center(
                             child: Padding(
                               padding: EdgeInsets.all(8.0),
-                              child: FittedBox(
-                                fit: BoxFit.contain,
-                                child: Text(
-                                  'Sign up with Email',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ),
+                              child: SizedBox(
+                                height: 20,
+                                width: 20,
+                                child:  CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          )
+                              : const Center(
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(
+                                'Sign up with Email',
+                                style: TextStyle(
+                                  color: Colors.white,
                                 ),
                               ),
                             ),
@@ -349,47 +361,53 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                           height: 15,
                         ),
 
-                        // const Text('or continue with'),
-                        // const SizedBox(height: 15),
+                        const Text('or continue with'),
+                        const SizedBox(height: 15),
 
                         // Google
-                        // FilledButton(
-                        //   style: ButtonStyle(
-                        //     backgroundColor: WidgetStateProperty.all<Color>(
-                        //         const Color(0xffeeeeee)),
-                        //     shape:
-                        //         WidgetStateProperty.all<RoundedRectangleBorder>(
-                        //       RoundedRectangleBorder(
-                        //         borderRadius: BorderRadius.circular(5),
-                        //       ),
-                        //     ),
-                        //   ),
-                        //   onPressed: () {},
-                        //   child: Container(
-                        //     padding: const EdgeInsets.all(10),
-                        //     child: Row(
-                        //       mainAxisAlignment: MainAxisAlignment.center,
-                        //       children: [
-                        //         const Image(
-                        //             image: AssetImage('assets/google_logo.png'),
-                        //             height: 15),
-                        //         const SizedBox(
-                        //           width: 5,
-                        //         ),
-                        //         Text(
-                        //           'Google',
-                        //           style: GoogleFonts.archivo(
-                        //             textStyle: const TextStyle(
-                        //               color: Colors.black,
-                        //               fontSize: 15,
-                        //               fontWeight: FontWeight.w700,
-                        //             ),
-                        //           ),
-                        //         ),
-                        //       ],
-                        //     ),
-                        //   ),
-                        // ),
+                        FilledButton(
+                          style: ButtonStyle(
+                            backgroundColor: WidgetStateProperty.all<Color>(
+                                const Color(0xffeeeeee)),
+                            shape:
+                                WidgetStateProperty.all<RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                            ),
+                          ),
+                          onPressed: () async {
+                            var user = await Auth().signInWithGoogle();
+                            if(user != null)
+                              {
+                                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const Home()));
+                              }
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Image(
+                                    image: AssetImage('assets/google_logo.png'),
+                                    height: 15),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                Text(
+                                  'Google',
+                                  style: GoogleFonts.archivo(
+                                    textStyle: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
 
                         const SizedBox(
                           height: 15,
@@ -460,7 +478,7 @@ class MobileLayout extends StatefulWidget {
   final BoxConstraints constraints;
   final TextEditingController emailController, passController;
   final GlobalKey<FormState> formKey;
-  final bool pwd;
+  final bool pwd, loading;
   final Function() handleSubmit;
   final Function() updatePwd;
 
@@ -473,6 +491,7 @@ class MobileLayout extends StatefulWidget {
     required this.pwd,
     required this.handleSubmit,
     required this.updatePwd,
+    required this.loading,
   });
 
   @override
@@ -630,76 +649,91 @@ class _MobileLayoutState extends State<MobileLayout> {
                                 widget.emailController.text)) {
                               widget.updatePwd();
                             } else {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const Signup()));
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => const Signup()));
                             }
                           } else {
                             widget.handleSubmit();
                           }
                         },
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text(
-                                'Sign up with Email',
-                                style: TextStyle(
-                                  color: Colors.white,
+                        child: widget.loading
+                            ? const Center(
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child:  CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                      color: Colors.white,
+                                    ),
+                                ),
+                              ),
+                            )
+                            : const Center(
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  'Sign up with Email',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
                             ),
-                          ],
-                        ),
                       ),
 
                       const SizedBox(
                         height: 15,
                       ),
 
-                      // const Text('or continue with'),
-                      // const SizedBox(height: 15),
+                      const Text('or continue with'),
+                      const SizedBox(height: 15),
 
                       // Google
-                      // FilledButton(
-                      //   style: ButtonStyle(
-                      //     backgroundColor: WidgetStateProperty.all<Color>(
-                      //         const Color(0xffeeeeee)),
-                      //     shape:
-                      //         WidgetStateProperty.all<RoundedRectangleBorder>(
-                      //       RoundedRectangleBorder(
-                      //         borderRadius: BorderRadius.circular(5),
-                      //       ),
-                      //     ),
-                      //   ),
-                      //   onPressed: () {},
-                      //   child: Container(
-                      //     padding: const EdgeInsets.all(10),
-                      //     child: Row(
-                      //       mainAxisAlignment: MainAxisAlignment.center,
-                      //       children: [
-                      //         const Image(
-                      //             image: AssetImage('assets/google_logo.png'),
-                      //             height: 15),
-                      //         const SizedBox(
-                      //           width: 10,
-                      //         ),
-                      //         Text(
-                      //           'Google',
-                      //           style: GoogleFonts.archivo(
-                      //             textStyle: const TextStyle(
-                      //               color: Colors.black,
-                      //               fontSize: 15,
-                      //               fontWeight: FontWeight.w700,
-                      //             ),
-                      //           ),
-                      //         ),
-                      //       ],
-                      //     ),
-                      //   ),
-                      // ),
+                      FilledButton(
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStateProperty.all<Color>(
+                              const Color(0xffeeeeee)),
+                          shape:
+                              WidgetStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                          ),
+                        ),
+                        onPressed: () async {
+                          var user = await Auth().signInWithGoogle();
+                          if(user != null)
+                          {
+                            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const Home()));
+                          }
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Image(
+                                  image: AssetImage('assets/google_logo.png'),
+                                  height: 15),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                'Google',
+                                style: GoogleFonts.archivo(
+                                  textStyle: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
 
                       const SizedBox(
                         height: 15,

@@ -72,8 +72,24 @@ class Auth {
   }
 
   // Sign in with Google
-  // Future<User?> signInWithGoogle() async {
-  //   // try {
+  Future<User?> signInWithGoogle() async {
+    GoogleAuthProvider googleProvider = GoogleAuthProvider();
+
+    googleProvider.addScope('https://www.googleapis.com/auth/userinfo.profile');
+    googleProvider.setCustomParameters({
+      'login_hint': 'user@example.com'
+    });
+
+    // Once signed in, return the UserCredential
+    final UserCredential userCredential = await FirebaseAuth.instance.signInWithPopup(googleProvider);
+    return userCredential.user;
+
+    // Or use signInWithRedirect
+    // return await FirebaseAuth.instance.signInWithRedirect(googleProvider);
+
+
+  }
+    // try {
   //   //   final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
   //   //   if (googleUser == null) return null;
   //   //

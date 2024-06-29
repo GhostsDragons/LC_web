@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:lc_web/Firebase/firebase_auth.dart';
+import 'package:lc_web/Firebase/_auth.dart';
 import '../Functions/functions.dart';
 import 'package:lc_web/Pages/onboarding.dart';
 
