@@ -7,7 +7,8 @@ import 'package:lc_web/Pages/home.dart';
 import 'package:lc_web/Pages/signup.dart';
 import 'package:lc_web/Functions/functions.dart';
 
-// TODO: Signup with google
+// TODO: Forgot Password
+// TODO: Optimize the code
 // TODO: Link to terms and Services and Privacy Policy
 // TODO: Fix the Coursel Slider for narrow screens
 
@@ -113,11 +114,6 @@ class DesktopLayout extends StatefulWidget {
 }
 
 class _DesktopLayoutState extends State<DesktopLayout> {
-  // signIn() async {
-  //   await Auth().signInWithGoogle();
-  //   Navigator.pushReplacement(
-  //       context, MaterialPageRoute(builder: (context) => const Home()));
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -162,7 +158,6 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                           'Learners’ \nClub',
                           style: GoogleFonts.unbounded(
                             textStyle: const TextStyle(
-                                fontFamily: 'Unbounded',
                                 fontWeight: FontWeight.w800,
                                 fontSize: 70,
                                 color: Color(0xff1F3E3C)),
