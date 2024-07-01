@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:lc_web/Functions/sidebar.dart';
 import 'package:collapsible_sidebar/collapsible_sidebar.dart';
 
-void main() => runApp(const Home());
-
 class Home extends StatelessWidget {
 const Home({super.key});
 
