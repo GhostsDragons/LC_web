@@ -38,16 +38,11 @@
   </script>
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer></script>
-  <script>
-    window.onbeforeunload = function() {
-      firebase.auth().signOut();
-    };
-  </script>
   <meta name="google-signin-client_id" content="205023071868-01b932nma3761ls8q7s5qedej7sa2mat.apps.googleusercontent.com">
 </head>
 <body>
-<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js"></script>
 <script src="auth.js"></script>
   <script>
     window.addEventListener('load', function(ev) {
