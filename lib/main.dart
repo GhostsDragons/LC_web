@@ -1,4 +1,7 @@
+// ignore_for_file: unused_import
+
 import 'package:flutter/material.dart';
+import 'package:lc_web/Pages/course_catalog.dart';
 import 'package:lc_web/Pages/home.dart';
 // import 'package:lc_web/Pages/settings.dart';
 import 'package:lc_web/Pages/login.dart';
