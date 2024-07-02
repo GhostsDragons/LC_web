@@ -11,6 +11,7 @@ import 'package:lc_web/Functions/functions.dart';
 // TODO: Optimize the code
 // TODO: Link to terms and Services and Privacy Policy
 // TODO: Fix the Coursel Slider for narrow screens
+// TODO: Create databse reference for Coursel Slider to take value intput from storage
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -114,7 +115,6 @@ class DesktopLayout extends StatefulWidget {
 }
 
 class _DesktopLayoutState extends State<DesktopLayout> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -323,33 +323,35 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                               }
                             } else {
                               widget.handleSubmit();
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => const Home()));
                             }
                           },
                           child: widget.loading
                               ? const Center(
-                            child: Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: SizedBox(
-                                height: 20,
-                                width: 20,
-                                child:  CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          )
+                                  child: Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                )
                               : const Center(
-                            child: Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text(
-                                'Sign up with Email',
-                                style: TextStyle(
-                                  color: Colors.white,
+                                  child: Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'Sign up with Email',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                          ),
                         ),
 
                         const SizedBox(
@@ -373,10 +375,11 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                           ),
                           onPressed: () async {
                             var user = await Auth().signInWithGoogle();
-                            if(user != null)
-                              {
-                                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const Home()));
-                              }
+                            if (user != null) {
+                              Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                      builder: (context) => const Home()));
+                            }
                           },
                           child: Container(
                             padding: const EdgeInsets.all(10),
@@ -653,29 +656,29 @@ class _MobileLayoutState extends State<MobileLayout> {
                         },
                         child: widget.loading
                             ? const Center(
-                              child: Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: SizedBox(
-                                  height: 20,
-                                  width: 20,
-                                  child:  CircularProgressIndicator(
-                                    strokeWidth: 2,
+                                child: Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
                                       color: Colors.white,
                                     ),
+                                  ),
                                 ),
-                              ),
-                            )
+                              )
                             : const Center(
-                              child: Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  'Sign up with Email',
-                                  style: TextStyle(
-                                    color: Colors.white,
+                                child: Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'Sign up with Email',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
                       ),
 
                       const SizedBox(
@@ -699,9 +702,10 @@ class _MobileLayoutState extends State<MobileLayout> {
                         ),
                         onPressed: () async {
                           var user = await Auth().signInWithGoogle();
-                          if(user != null)
-                          {
-                            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const Home()));
+                          if (user != null) {
+                            Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    builder: (context) => const Home()));
                           }
                         },
                         child: Container(

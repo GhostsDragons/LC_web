@@ -1,8 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lc_web/Firebase/_auth.dart';
 import 'package:lc_web/Functions/functions.dart';
 import 'package:lc_web/Pages/transition_page.dart';
 import 'package:lottie/lottie.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class Onboarding extends StatefulWidget {
   const Onboarding({super.key});
@@ -33,14 +38,65 @@ class DesktopLayout extends StatefulWidget {
 }
 
 class _DesktopLayoutState extends State<DesktopLayout> {
+  final User? user = Auth().getUser();
+
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseStorage _storage = FirebaseStorage.instance;
+
   String? name;
   String? _grade;
   String? _board;
 
   final List<String> boardOptions = ['CBSE', 'ICSE', 'IGCSE', 'SSC'];
-  final List<String> gradeOptions = ['Grade 9', 'Grade 10', 'Grade 11', 'Grade 12'];
+  final List<String> gradeOptions = [
+    'Grade 9',
+    'Grade 10',
+    'Grade 11',
+    'Grade 12'
+  ];
 
   final nameController = TextEditingController();
+
+  XFile? file;
+
+  String? downloadURL;
+
+  Future<void> _pickProfile() async {
+    ImagePicker imagePicker = ImagePicker();
+    file = await imagePicker.pickImage(source: ImageSource.gallery);
+  }
+
+  void submit() async {
+    try {
+      if (file != null) {
+        Blob blob = Blob(await file!.readAsBytes());
+        final path = "userProfilePictures/${user!.uid}/profilePicture.jpg";
+        Reference imageRef = _storage.ref().child(path);
+
+        await imageRef.putBlob(blob.bytes);
+
+        downloadURL = await imageRef.getDownloadURL();
+      } else {
+        return;
+      }
+    } catch (e) {
+      // TODO: Error handling
+      print(e);
+    }
+
+    name = nameController.text;
+    await _firestore.collection('users').doc(user!.uid).update({
+      'username': name,
+      'grade': _grade,
+      'board': _board,
+      'profilePictureURL': downloadURL,
+    });
+
+    user!.updatePhotoURL(downloadURL);
+    user!.updateDisplayName(name);
+
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const TransitionPage()));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,21 +113,22 @@ class _DesktopLayoutState extends State<DesktopLayout> {
             flex: 1,
             child: Center(
               child: Container(
-                width: widget.constraints.maxWidth/3.5,
-                height: widget.constraints.maxHeight/1.3,
+                width: widget.constraints.maxWidth / 3.5,
+                height: widget.constraints.maxHeight / 1.3,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10.0),
                 ),
-
-                padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 20.0),
-
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 40.0, vertical: 20.0),
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 20,),
 
+                      const SizedBox(
+                        height: 20,
+                      ),
                       Center(
                         child: FittedBox(
                           fit: BoxFit.contain,
@@ -96,15 +153,16 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                       const SizedBox(height: 10.0),
 
                       FormInput(
-                          textController: nameController,
-                          keyboardType: TextInputType.name,
-                          hint: 'Full Name',
+                        textController: nameController,
+                        keyboardType: TextInputType.name,
+                        hint: 'Full Name',
                       ),
 
                       const SizedBox(height: 20.0),
 
-                      Text('Your grade',
-                      style: GoogleFonts.inter(),
+                      Text(
+                        'Your grade',
+                        style: GoogleFonts.inter(),
                       ),
 
                       const SizedBox(height: 10.0),
@@ -131,19 +189,14 @@ class _DesktopLayoutState extends State<DesktopLayout> {
 
                       const SizedBox(height: 10.0),
 
+                      ElevatedButton(
+                        onPressed: _pickProfile,
+                        child: const Text('Pick an image'),
+                      ),
                       Center(
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const TransitionPage(
-                                    // name: _name,
-                                    // grade: _grade,
-                                    // board: _board,
-                                    ),
-                              ),
-                            );
+                            submit();
                           },
                           child: const Text('Next'),
                         ),
@@ -159,19 +212,21 @@ class _DesktopLayoutState extends State<DesktopLayout> {
           // Right hand side
           // ---------------------------------------------------------------------------------------
 
-          Expanded(
-            flex: 1,
-            child: Container(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-              ),
-              child: Center(
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.5,
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  child: Lottie.network(
-                      'https://lottie.host/75cc02d9-7347-4f47-8814-32d027651e77/M8HI0ZNtCO.json',
-                      fit: BoxFit.contain
+          Visibility(
+            visible: true,
+            child: Expanded(
+              flex: 1,
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                ),
+                child: Center(
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.5,
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    child: Lottie.network(
+                        'https://lottie.host/75cc02d9-7347-4f47-8814-32d027651e77/M8HI0ZNtCO.json',
+                        fit: BoxFit.contain),
                   ),
                 ),
               ),
@@ -208,8 +263,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
               _grade = newValue;
             });
           },
-          hint: Text("Select your grade",
-              style: hintStyle),
+          hint: Text("Select your grade", style: hintStyle),
           items: gradeOptions
               .map((grade) =>
                   DropdownMenuItem<String>(value: grade, child: Text(grade)))
@@ -230,9 +284,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
           underline: underline,
           icon: icon,
           dropdownColor: dropdownColor,
-          style: const TextStyle(
-              fontSize: 15
-          ),
+          style: const TextStyle(fontSize: 15),
           iconEnabledColor: iconEnabledColor,
           isExpanded: true,
           isDense: true,
@@ -241,11 +293,10 @@ class _DesktopLayoutState extends State<DesktopLayout> {
               _board = newValue;
             });
           },
-          hint: const Text("Select your board",
-            style: TextStyle(
-              fontSize: 15
-            ),
-            ),
+          hint: const Text(
+            "Select your board",
+            style: TextStyle(fontSize: 15),
+          ),
           items: boardOptions
               .map((board) =>
                   DropdownMenuItem<String>(value: board, child: Text(board)))
@@ -266,5 +317,3 @@ class _MobileLayoutState extends State<MobileLayout> {
     return const Placeholder();
   }
 }
-
-

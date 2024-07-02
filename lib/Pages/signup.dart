@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lc_web/Firebase/_auth.dart';
 import 'package:lc_web/Functions/functions.dart';
-import 'package:lc_web/Pages/onboarding.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:lc_web/Pages/onboarding.dart';
 
 // TODO: Link to terms and Services and Privacy Policy
 // TODO: Login Button
@@ -43,10 +43,11 @@ class _SignupState extends State<Signup> {
     });
 
     if (repeat == password) {
-      final User? user = await Auth().registerWithEmailAndPassword(email, password);
+      final User? user =
+          await Auth().registerWithEmailAndPassword(email, password);
       if (user != null) {
-
-        DocumentSnapshot doc = await _firestore.collection('users').doc(user.uid).get();
+        DocumentSnapshot doc =
+            await _firestore.collection('users').doc(user.uid).get();
 
         if (!doc.exists) {
           _firestore.collection('users').doc(user.uid).set({
@@ -55,7 +56,8 @@ class _SignupState extends State<Signup> {
           });
         }
 
-        Navigator.of(context).pushReplacementNamed('/onboarding');
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const Onboarding()));
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -73,32 +75,32 @@ class _SignupState extends State<Signup> {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-            builder: (context, constraints) {
-              if (constraints.maxWidth < 600) {
-                return MobileLayout(
-                  constraints: constraints,
-                  emailController: emailController,
-                  passController: passController,
-                  confPassController: confPassController,
-                  formKey: formKey,
-                  handleSubmit: handleSubmit,
-                  loading: loading,
-                  isMobile: true,
-                );
-              } else {
-                return MobileLayout(
-                  constraints: constraints,
-                  emailController: emailController,
-                  passController: passController,
-                  confPassController: confPassController,
-                  formKey: formKey,
-                  handleSubmit: handleSubmit,
-                  loading: loading,
-                  isMobile: false,
-                );
-              }
-            },
+      builder: (context, constraints) {
+        if (constraints.maxWidth < 600) {
+          return MobileLayout(
+            constraints: constraints,
+            emailController: emailController,
+            passController: passController,
+            confPassController: confPassController,
+            formKey: formKey,
+            handleSubmit: handleSubmit,
+            loading: loading,
+            isMobile: true,
           );
+        } else {
+          return MobileLayout(
+            constraints: constraints,
+            emailController: emailController,
+            passController: passController,
+            confPassController: confPassController,
+            formKey: formKey,
+            handleSubmit: handleSubmit,
+            loading: loading,
+            isMobile: false,
+          );
+        }
+      },
+    );
   }
 }
 
@@ -350,7 +352,7 @@ class _MobileLayoutState extends State<MobileLayout> {
                                           MainAxisAlignment.center,
                                       children: [
                                         Padding(
-                                          padding: EdgeInsets.all(8.0),
+                                          padding: const EdgeInsets.all(8.0),
                                           child: Text(
                                             'Sign up with Email',
                                             style: GoogleFonts.inter(
