@@ -11,13 +11,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:lc_web/firebase_options.dart';
 import 'package:lottie/lottie.dart';
 
+// TODO: Add mobile application integration
+// TODO: Setup Theme data
+// TODO:
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  // Auth().signOut();
 
   runApp(const MyApp());
 }
@@ -30,7 +32,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: false,
       title: 'Learners\' Club',
       theme: ThemeData(
         primarySwatch: Colors.blue,
