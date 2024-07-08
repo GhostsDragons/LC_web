@@ -88,16 +88,8 @@ class _LoginState extends State<Login> {
           });
         }
       }
-
-      try {
-        print("here");
-        // TODO Look into sigup route
         Navigator.of(context)
             .pushReplacement(MaterialPageRoute(builder: (context) => const Onboarding()));
-      }
-      catch (e){
-        print(e);
-      }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
