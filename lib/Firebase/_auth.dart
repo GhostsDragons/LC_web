@@ -67,6 +67,8 @@ class Auth {
     googleProvider.addScope('https://www.googleapis.com/auth/userinfo.profile');
     googleProvider.setCustomParameters({'login_hint': 'user@example.com'});
 
+    // TODO: Setup Signin with redirect
+
     // Once signed in, return the UserCredential
     final UserCredential userCredential =
         await FirebaseAuth.instance.signInWithPopup(googleProvider);
