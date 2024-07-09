@@ -77,7 +77,7 @@ class FormInput extends StatelessWidget {
       required this.textController,
       required this.keyboardType,
       this.label,
-      required this.hint,
+      this.hint,
       this.obsTxt = false,
       this.vis = true});
 
