@@ -1,13 +1,14 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lc_web/Firebase/_auth.dart';
-import 'package:lc_web/Functions/functions.dart';
+import 'package:lc_web/Functions/widgets.dart';
 import 'package:lc_web/Pages/transition_page.dart';
 import 'package:lottie/lottie.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:lc_web/Firebase/_storage.dart';
+
+// TODO: Use StreamBuilder and try
 
 class Onboarding extends StatefulWidget {
   const Onboarding({super.key});
@@ -40,9 +41,6 @@ class DesktopLayout extends StatefulWidget {
 class _DesktopLayoutState extends State<DesktopLayout> {
   final User? user = Auth().getUser();
 
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseStorage _storage = FirebaseStorage.instance;
-
   String? name;
   String? _grade;
   String? _board;
@@ -59,43 +57,23 @@ class _DesktopLayoutState extends State<DesktopLayout> {
 
   XFile? file;
 
-  String? downloadURL;
-
   Future<void> _pickProfile() async {
     ImagePicker imagePicker = ImagePicker();
     file = await imagePicker.pickImage(source: ImageSource.gallery);
   }
 
   void submit() async {
-    try {
-      if (file != null) {
-        Blob blob = Blob(await file!.readAsBytes());
-        final path = "userProfilePictures/${user!.uid}/profilePicture.jpg";
-        Reference imageRef = _storage.ref().child(path);
-
-        await imageRef.putBlob(blob.bytes);
-
-        downloadURL = await imageRef.getDownloadURL();
-      } else {
-        return;
-      }
-    } catch (e) {
-      // TODO: Error handling
-      print(e);
-    }
-
     name = nameController.text;
-    await _firestore.collection('users').doc(user!.uid).update({
+    user!.updateDisplayName(name);
+    await Storage().updateProfilePic("userProfilePictures", file);
+    await Storage().updateDatabase('users', {
       'username': name,
       'grade': _grade,
       'board': _board,
-      'profilePictureURL': downloadURL,
     });
 
-    user!.updatePhotoURL(downloadURL);
-    user!.updateDisplayName(name);
-
-    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const TransitionPage()));
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const TransitionPage()));
   }
 
   @override
@@ -189,10 +167,14 @@ class _DesktopLayoutState extends State<DesktopLayout> {
 
                       const SizedBox(height: 10.0),
 
-                      ElevatedButton(
-                        onPressed: _pickProfile,
-                        child: const Text('Pick an image'),
+                      // TODO: Setup image picker according to layout
+                      Center(
+                        child: ElevatedButton(
+                          onPressed: _pickProfile,
+                          child: const Text('Pick an image'),
+                        ),
                       ),
+
                       Center(
                         child: ElevatedButton(
                           onPressed: () {

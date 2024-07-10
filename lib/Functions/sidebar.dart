@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lc_web/Firebase/_auth.dart';
+import 'package:lc_web/Pages/login.dart';
 import 'collapsible_sidebar.dart';
 import 'package:lc_web/Pages/profile.dart';
 
@@ -80,7 +81,10 @@ class _SidebarState extends State<Sidebar> {
      CollapsibleItem(
       text: 'Logout',
       icon: Icons.edit,
-      onPressed: () => Auth().signOut(),
+      onPressed: () async {
+        await Auth().signOut();
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const Login()), (Route<dynamic> route) => false);
+      }
      ),
     ];
   }
@@ -123,17 +127,6 @@ class _SidebarState extends State<Sidebar> {
 
   Widget _body(Size size, BuildContext context) {
     return widget.body;
-    // return SizedBox(
-    //   width: double.infinity,
-    //   height: double.infinity,
-    //   child: Center(
-    //     child: Text(
-    //       'Hi there',
-    //       style: Theme.of(context).textTheme.headlineMedium,
-    //       overflow: TextOverflow.visible,
-    //       softWrap: false,
-    //     ),
-    //   ),
-    // );
+
   }
 }
