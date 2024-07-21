@@ -120,40 +120,23 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
-      if (constraints.maxWidth < 600) {
-        return DesktopLayout(
-          constraints: constraints,
-          emailController: emailController,
-          passController: passController,
-          confPassController: confPassController,
-          formKey: formKey,
-          pwd: pwd,
-          handleLogin: handleLogin,
-          handleSignup: handleSignup,
-          updatePwd: updatePwd,
-          updateNew: updateNew,
-          loading: loading,
-          isMobile: true,
-          isNewUser: isNewUser,
-        );
-      } else {
-        return DesktopLayout(
-          constraints: constraints,
-          emailController: emailController,
-          passController: passController,
-          confPassController: confPassController,
-          formKey: formKey,
-          pwd: pwd,
-          handleLogin: handleLogin,
-          handleSignup: handleSignup,
-          updatePwd: updatePwd,
-          updateNew: updateNew,
-          loading: loading,
-          isMobile: false,
-          isNewUser: isNewUser,
-        );
+      return DesktopLayout(
+        constraints: constraints,
+        emailController: emailController,
+        passController: passController,
+        confPassController: confPassController,
+        formKey: formKey,
+        pwd: pwd,
+        handleLogin: handleLogin,
+        handleSignup: handleSignup,
+        updatePwd: updatePwd,
+        updateNew: updateNew,
+        loading: loading,
+        isMobile: constraints.maxWidth < 600,
+        isNewUser: isNewUser,
+      );
       }
-    });
+    );
   }
 }
 
@@ -349,7 +332,6 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                                       textAlign: TextAlign.center,
                                       style: GoogleFonts.unbounded(
                                         textStyle: const TextStyle(
-                                          fontFamily: 'Unbounded',
                                           fontWeight: FontWeight.w800,
                                           fontSize: 70,
                                           color: Color(0xff1F3E3C),
@@ -436,6 +418,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                                   Visibility(
                                     visible: widget.isNewUser,
                                     child: Text(
+                                      textAlign: TextAlign.center,
                                       "Create an Account",
                                       style: GoogleFonts.inter(
                                         textStyle: const TextStyle(
@@ -450,6 +433,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                                   Visibility(
                                     visible: widget.isNewUser,
                                     child: Text(
+                                      textAlign: TextAlign.center,
                                       "Seems like you do not have an account",
                                       style: GoogleFonts.inter(
                                         textStyle: const TextStyle(
@@ -550,7 +534,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                                             if (widget.isNewUser) {
                                               widget.updatePwd();
                                             } else {
-                                              widget.handleLogin();
+                                              await widget.handleLogin();
                                             }
                                           }
                                         } else {
@@ -564,7 +548,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                                           if (!widget.isNewUser) {
                                             widget.updateNew();
                                           } else {
-                                            widget.handleSignup();
+                                            await widget.handleSignup();
                                           }
                                         }
                                       }
