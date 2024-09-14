@@ -4,7 +4,7 @@ import 'package:lc_web/Firebase/_auth.dart';
 import 'package:lc_web/Pages/login.dart';
 import 'collapsible_sidebar.dart';
 import 'package:lc_web/Pages/profile.dart';
-
+import 'package:lc_web/Pages/course_catalog.dart';
 class Sidebar extends StatefulWidget {
   final Widget body;
   const Sidebar({
@@ -31,61 +31,67 @@ class _SidebarState extends State<Sidebar> {
   List<CollapsibleItem> get _homeItems {
     return [
       CollapsibleItem(
-      text: 'Home',
-      icon: Icons.home_outlined,
-      onPressed: (){},
-      isSelected: true,
-    ),
-    CollapsibleItem(
-      text: 'Calendar',
-      icon: Icons.calendar_month_outlined,
-      onPressed: (){},
-    ),
-    CollapsibleItem(
-      text: 'Chat',
-      icon: Icons.textsms_outlined,
-      onPressed: (){},
-    ),
-    CollapsibleItem(
-      text: 'Course Catalog',
-      icon: Icons.bookmark_border_outlined,
-      onPressed: (){},
-    ),
-    CollapsibleItem(
-      text: '1:1 Mentorship Program',
-      icon: CupertinoIcons.graph_square,
-      onPressed: (){},
-    ),
-    CollapsibleItem(
-      text: 'Concept Clarity',
-      icon: Icons.lightbulb_circle_outlined,
-      onPressed: () {},
-    ),
-     CollapsibleItem(
-      text: 'Copywriting 101',
-      icon: Icons.edit,
-      onPressed: (){},
-    ),
-    CollapsibleItem(
-      text: 'Profile',
-      icon: Icons.account_circle_outlined,
-      onPressed: (){
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Profile()));
-      },
-    ),
-    CollapsibleItem(
-      text: 'Settings',
-      icon: Icons.lightbulb_circle_outlined,
-      onPressed: () {},
-    ),
-     CollapsibleItem(
-      text: 'Logout',
-      icon: Icons.edit,
-      onPressed: () async {
-        await Auth().signOut();
-        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const Login()), (Route<dynamic> route) => false);
-      }
-     ),
+        text: 'Home',
+        icon: Icons.home_outlined,
+        onPressed: () {},
+        isSelected: true,
+      ),
+      CollapsibleItem(
+        text: 'Calendar',
+        icon: Icons.calendar_month_outlined,
+        onPressed: () {},
+      ),
+      CollapsibleItem(
+        text: 'Chat',
+        icon: Icons.textsms_outlined,
+        onPressed: () {},
+      ),
+      CollapsibleItem(
+        text: 'Course Catalog',
+        icon: Icons.bookmark_border_outlined,
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => CourseCatalog()));
+        },
+      ),
+      CollapsibleItem(
+        text: '1:1 Mentorship Program',
+        icon: CupertinoIcons.graph_square,
+        onPressed: () {},
+      ),
+      CollapsibleItem(
+        text: 'Concept Clarity',
+        icon: Icons.lightbulb_circle_outlined,
+        onPressed: () {},
+      ),
+      CollapsibleItem(
+        text: 'Copywriting 101',
+        icon: Icons.edit,
+        onPressed: () {},
+      ),
+      CollapsibleItem(
+        text: 'Profile',
+        icon: Icons.account_circle_outlined,
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const Profile()));
+        },
+      ),
+      CollapsibleItem(
+        text: 'Settings',
+        icon: Icons.lightbulb_circle_outlined,
+        onPressed: () {},
+      ),
+      CollapsibleItem(
+          text: 'Logout',
+          icon: Icons.edit,
+          onPressed: () async {
+            await Auth().signOut();
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const Login()),
+                (Route<dynamic> route) => false);
+          }),
     ];
   }
 
@@ -127,6 +133,5 @@ class _SidebarState extends State<Sidebar> {
 
   Widget _body(Size size, BuildContext context) {
     return widget.body;
-
   }
 }

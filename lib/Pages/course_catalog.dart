@@ -41,7 +41,7 @@ class CourseCatalog extends StatelessWidget {
               flex: 1,
               child: Container(
                 width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height * 0.1,
+                height: 30,
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.black, width: 3),
                   image: DecorationImage(
