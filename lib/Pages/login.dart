@@ -1,12 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lc_web/Firebase/_auth.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:lc_web/Functions/sidebar.dart';
+import 'package:lc_web/Functions/widgets.dart';
 import 'package:lc_web/Pages/home.dart';
 import 'package:lc_web/Pages/onboarding.dart';
-import 'package:lc_web/Functions/widgets.dart';
 
 // TODO: Forgot Password
 // TODO: Optimize the code
@@ -54,8 +55,8 @@ class _LoginState extends State<Login> {
     final User? user = await Auth().signInWithEmailAndPassword(email, password);
 
     if (user != null) {
-      Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (context) => const Home()));
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const Sidebar()));
     }
     setState(() {
       loading = false;
@@ -88,8 +89,8 @@ class _LoginState extends State<Login> {
           });
         }
       }
-        Navigator.of(context)
-            .pushReplacement(MaterialPageRoute(builder: (context) => const Onboarding()));
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const Onboarding()));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -135,8 +136,7 @@ class _LoginState extends State<Login> {
         isMobile: constraints.maxWidth < 600,
         isNewUser: isNewUser,
       );
-      }
-    );
+    });
   }
 }
 
@@ -178,7 +178,6 @@ class DesktopLayout extends StatefulWidget {
 }
 
 class _DesktopLayoutState extends State<DesktopLayout> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -206,7 +205,6 @@ class _DesktopLayoutState extends State<DesktopLayout> {
 
           Row(
             children: [
-
               // First Colm
               Visibility(
                 visible: !widget.isMobile,
@@ -248,7 +246,6 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                             'Learning Unbounded',
                             style: GoogleFonts.unbounded(
                               textStyle: const TextStyle(
-                                  fontFamily: 'Unbounded',
                                   fontSize: 30,
                                   fontStyle: FontStyle.italic,
                                   color: Color(0x991F3E3C)),
@@ -273,7 +270,6 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                         child: CarouselSlider(
                           options: CarouselOptions(
                             height: 500,
-                            // aspectRatio: 16/9,
                             viewportFraction: 1,
                             autoPlay: true,
                             autoPlayInterval: const Duration(seconds: 3),
@@ -471,8 +467,12 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                                       textController: widget.passController,
                                       keyboardType:
                                           TextInputType.visiblePassword,
-                                      label: widget.isNewUser? 'Create password':'Password',
-                                      hint: widget.isNewUser? 'Create your password':'Enter your password',
+                                      label: widget.isNewUser
+                                          ? 'Create password'
+                                          : 'Password',
+                                      hint: widget.isNewUser
+                                          ? 'Create your password'
+                                          : 'Enter your password',
                                       obsTxt: true,
                                       vis: widget.pwd,
                                     ),
@@ -512,14 +512,12 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                                       if (widget.emailController.text == "") {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
-                                            const SnackBar(
-                                              content: Text('Enter your email'),
-                                            ),
+                                          const SnackBar(
+                                            content: Text('Enter your email'),
+                                          ),
                                         );
-                                          return;
-                                      }
-                                      else
-                                      {
+                                        return;
+                                      } else {
                                         if (await Auth().isEmailRegistered(
                                             widget.emailController.text)) {
                                           ScaffoldMessenger.of(context)
@@ -542,7 +540,7 @@ class _DesktopLayoutState extends State<DesktopLayout> {
                                               .showSnackBar(
                                             const SnackBar(
                                               content:
-                                              Text('User does not exist'),
+                                                  Text('User does not exist'),
                                             ),
                                           );
                                           if (!widget.isNewUser) {
